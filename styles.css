@@ -1,0 +1,288 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+main {
+    width: 100%;
+    display: flex;
+    /* grid-template-columns: 1fr 1fr; */
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    flex-wrap: wrap;
+}
+
+.container {
+    width: 100%;
+    flex: 1;
+    min-width: 40.4rem;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 2rem;
+}
+
+.logo-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.btn-flex {
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.btn-section {
+    border: none;
+    padding: 1rem;
+    background-color: transparent;
+    border-radius: inherit;
+}
+
+.btn-section.current {
+    background-color: rgba(255, 200, 3, 0.833);
+}
+
+.study {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.study-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+    padding-bottom: 2rem;
+    padding: 1rem;
+}
+
+.display-control {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.content-control {
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    font-size: 1.5rem;
+    background: transparent;
+    border: 1px solid black;
+    border-radius: 50px;
+}
+
+.shuffle {
+    background-color: transparent;
+    border: 1px solid black;
+    padding: 1rem 2.5rem;
+    border-radius: 20px;
+}
+
+.padding-manager {
+    width: 100%;
+    padding: 1rem;
+}
+
+.flash-card-container {
+    width: 100%;
+    padding: 1rem;
+}
+
+.flash-card-container {
+    width: 100%;
+    background-color: rgb(255, 192, 242);
+    height: 35vh;
+    border-radius: 12px;
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 7rem;
+}
+
+.flash-cards {
+    width: 100%;
+    position: relative;
+}
+
+.flash-card {
+    display: none;
+    height: 3rem;
+    background-color: transparent;
+    perspective: 1000px; 
+}
+
+.flash-card.active {
+    display: block;
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from{opacity: 0; transform: translateX(20px)};
+    to{opacity: 1; transform: translateX(0)};
+}
+
+.flash-card-content {
+    height: 100%;
+    position: relative;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.flash-card-question, .flash-card-answer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
+
+.flash-card-answer {
+      transform: rotateY(180deg);
+}
+
+.flash-card-content.rotate {
+    transform: rotateY(180deg);
+}
+
+.question {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.answer {
+    font-size: 3rem;
+}
+
+.progress-flex {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.progress-bar {
+    width: 10rem;
+    display: flex;
+    height: 1rem;
+    border-radius: 12px;
+    background-color: white;
+    border: 1px solid RGBa(0, 0, 0, .5);
+}
+
+.progress-content {
+    transition: all 0.4s;
+    border-radius: inherit;
+    width: 10%;
+    background-color: yellow;
+}
+
+.flash-flex {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding: 2rem 0;
+    border-bottom: 1px solid black;
+}
+
+.master {
+    padding: 1rem 3rem;
+    border-radius: 20px;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    background-color: rgba(255, 200, 3, 0.833);;
+}
+
+.reset {
+    padding: 1rem 3rem;
+    border: 1px solid black;
+    background-color: transparent;
+    border-radius: 20px;
+}
+
+.control-btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.control-btns button {
+    padding: 1rem 2rem;
+    border: 1px solid black;
+    background-color: transparent;
+    border-radius: 20px;
+}
+
+.form-container {
+    width: 100%;
+    flex: 1;
+    min-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    justify-content: center;
+    width: fit-content;
+    border: 1px solid black;
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    justify-content: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.form-group label {
+    font-weight: 700;
+}
+
+.form-group input {
+    border: 1px solid rgb(255, 192, 242);
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+.add-btn {
+    width: 100%;
+    background-color: rgb(255, 192, 242);
+    border: none;
+    padding: 1rem;
+    border-radius: 2rem;
+}
+
+.form-error {
+    color: red;
+    font-size: 1.4rem;
+}

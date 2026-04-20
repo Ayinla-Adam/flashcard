@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="script.js"></script>
+</head>
+
+<body>
+    <main>
+        <div class="container">
+            <div class="title">
+                <div class="logo-wrapper">
+                    <img src="./DESIGNS/image.png" width="50" height = "50" alt="logo" />
+                    <h2>Flashcard</h2>
+                </div>
+
+                <!-- <div class="btn-flex">
+                    <button class="btn-section current">Study Mode</button>
+                    <button class="btn-section">All Cards</button>
+                </div> -->
+            </div>
+
+            <div class="content">
+                <div class="study">
+                    <div class="study-flex">
+                        <div class="display-control">
+                            <button class="content-control">CARDS</button>
+                            <div class="hide-mastered">
+                                <input type="checkbox" value="hide" id="hide-mastered" />
+                                <label for="hide-mastered">Hide Mastered</label>
+                            </div>
+                        </div>
+
+                        <button class="shuffle">Shuffle</button>
+                    </div>
+
+                    <div class="padding-manager">
+
+
+                        <div class="flash-card-container">
+                            <div class="flash-cards">
+                                
+                            </div>
+                            
+                            <div class="progress-flex">
+                                <div class="progress-bar"><span class="progress-content"></span></div>
+                                <p class="number"></p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="flash-flex">
+                        <button class="master">I know this</button>
+                        <button class="reset">Reset Progress</button>
+                    </div>
+                    <div class="control-btns">
+                        <button class="prev-btn">< Previous</button>
+                        <p class="number"></p>
+                        <button class="next-btn">Next ></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h2>Add a card</h2>
+
+            <form>
+                <div class="form-group">
+                    <label for="question">Question:</label>
+                    <input type="text" id="question" placeholder="Enter your question"/>
+                    <p class="form-error" id="question-error"></p>
+                </div>
+    
+                <div class="form-group">
+                    <label for="answer">Answer:</label>
+                    <input type="text" id="answer" placeholder="Enter your answer" />
+                    <p class="form-error" id="answer-error"></p>
+                </div>
+    
+                <button type="submit" class="add-btn">ADD</button>
+            </form>
+        </div>
+    </main>
+
+</body>
+
+</html>
