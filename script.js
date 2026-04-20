@@ -21,8 +21,8 @@ function updateList() {
         cardsContent.forEach((content) => content.classList.remove("rotate"));
         if(cards.length > 0) {
             cards[currentCard].classList.add("active");
-        } else{
-            cardsParent.innerHTML = `<h3 style="text-align:>Cards you add appear here</h1>`
+        } else {
+            cardsParent.innerHTML = `<h3 style="text-align: center;">Cards you add appear here</h3>`
         }
 }
 
