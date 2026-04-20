@@ -20,7 +20,6 @@ body {
 main {
     width: 100%;
     display: flex;
-    /* grid-template-columns: 1fr 1fr; */
     gap: 2rem;
     align-items: center;
     justify-content: center;
@@ -285,4 +284,10 @@ form {
 .form-error {
     color: red;
     font-size: 1.4rem;
+}
+
+@media(max-width: 540px) {
+    html {
+        font-size: 50%;
+    }
 }
