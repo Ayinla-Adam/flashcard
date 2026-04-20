@@ -81,17 +81,19 @@ function checkLabel() {
 checkLabel();
 
 function changeSlide(index) {
-    cards.forEach(card => {
-        card.classList.remove("active");
-    })
-
-    cardsContent.forEach((content) => {
-        content.classList.remove("rotate");
-    })
-
-    currentCard = (index + cards.length) % cards.length;
-    cards[currentCard].classList.add("active")
-    checkLabel();
+    if(cards.length > 0) {
+        cards.forEach(card => {
+            card.classList.remove("active");
+        })
+    
+        cardsContent.forEach((content) => {
+            content.classList.remove("rotate");
+        })
+    
+        currentCard = (index + cards.length) % cards.length;
+        cards[currentCard].classList.add("active")
+        checkLabel();
+    }
 };
 
 
@@ -104,10 +106,6 @@ document.addEventListener("keydown", function(e) {
     if(e.key === "ArrowRight") {
         currentCard += 1;
         changeSlide(currentCard);
-    }
-
-    if(e.key === "Enter") {
-        cardsContent[currentCard].classList.toggle("rotate");
     }
 })
 
@@ -155,7 +153,7 @@ form.addEventListener("submit", function(e) {
     renderCards(allCards);
     updateList();
     checkLabel();
-    
+    alert("Flashcard successfully created");
     form.reset();
     // }
 })
@@ -171,30 +169,38 @@ nextBtn.addEventListener("click", function() {
 });
 
 cardsContainer.addEventListener("click", function() {
-    cardsContent[currentCard].classList.toggle("rotate");
+    if(cards.length > 0) {
+        cardsContent[currentCard].classList.toggle("rotate");
+    }
 });
 
 const masterBtn = document.querySelector(".master");
 const hideBtn = document.querySelector("#hide-mastered");
 
 masterBtn.addEventListener("click", function() {
-    cards.forEach((card, index) => {
-        if(card.classList.contains("active")) {
-            allCards[index].Status = "mastered";
-            localStorage.setItem("storedCards", JSON.stringify(allCards))
-            return true;
-        }
-    })
+    if(hideBtn.checked) {
+        cards.forEach((card, index) => {
+            if(card.classList.contains("active")) {
+                const selected = allCards.filter((cards) => cards.Status !== "mastered");
+                selected[index].Status = "mastered";
+                localStorage.setItem("storedCards", JSON.stringify(allCards))
+            }
+        })
+    } else {
+        cards.forEach((card, index) => {
+            if(card.classList.contains("active")) {
+                allCards[index].Status = "mastered";
+                localStorage.setItem("storedCards", JSON.stringify(allCards))
+            }
+        })
+    }
 
     updateSelected();
-    updateList();
     currentCard += 1;
     changeSlide(currentCard)
 })
 
 function updateSelected() {
-    let shown = []
-
     if(hideBtn.checked) {
         // cards.forEach((flashcard, index) => {
             //         if(!flashcard.classList.contains("mastered")) {
@@ -232,7 +238,6 @@ function shuffleCards(array) {
     if(array.length > 1) {
         for(let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i));
-            console.log(j);
             [array[i], array[j]] = [array[j], array[i]];
         }
     
