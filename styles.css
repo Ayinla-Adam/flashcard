@@ -10,10 +10,10 @@ html {
 }
 
 body {
-    margin-top: 5rem;
+    /* margin-top: 5rem; */
     font-size: 1.6rem;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
     height: 100vh;
 }
@@ -291,4 +291,10 @@ form {
     html {
         font-size: 50%;
     }
+}
+
+.hide-mastered {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
