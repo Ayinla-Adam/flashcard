@@ -287,8 +287,8 @@ document.querySelector(".delete").addEventListener("click", function() {
             })
 
             const newSelected = allCards.filter((card) => card.Status !== "mastered");
-            renderCards(newSelected);
             checkLabel();
+            renderCards(newSelected);
             updateList();
             return true;
         } else {
@@ -300,10 +300,14 @@ document.querySelector(".delete").addEventListener("click", function() {
 
             localStorage.setItem("storedCards", JSON.stringify(allCards))
             renderCards(allCards);
-            currentCard -= 1;
-            changeSlide(currentCard);
             updateList();
             checkLabel();
+            if(currentCard > 1) {
+                currentCard -=1
+            } else {
+                currentCard = 0;
+            }
+            changeSlide(currentCard);
         }
     }
 }) 
