@@ -315,4 +315,76 @@ document.querySelector(".delete").addEventListener("click", function() {
             changeSlide(currentCard);
         }
     }
-}) 
+});
+
+function openModal() {
+    document.querySelector(".overlay").classList.remove("hidden");
+    document.querySelector(".edit-form").classList.remove("hidden");
+}
+
+function closeModal() {
+    document.querySelector(".overlay").classList.add("hidden");
+    document.querySelector(".edit-form").classList.add("hidden");
+}
+
+document.querySelector(".edit").addEventListener("click", openModal)
+document.querySelector(".overlay").addEventListener("click", closeModal);
+
+document.querySelector("#new-question").addEventListener("focus", function() {
+    document.querySelectorAll(".new-form-error").forEach((error) => error.textContent = "");
+});
+
+document.querySelector("#new-answer").addEventListener("focus", function() {
+    document.querySelectorAll(".new-form-error").forEach((error) => error.textContent = "");
+});
+
+
+document.querySelector(".edit-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const newQuestion = document.getElementById("new-question").value;
+    const newAnswer = document.getElementById("new-answer").value;
+        if(newQuestion.trim() === "") {
+        document.querySelector("#new-question-error").textContent = "A question is required";
+        return false;
+    }
+    
+    if(newAnswer.trim() === "") {
+        document.querySelector("#new-answer-error").textContent = "An answer is required";
+        return false;
+    }
+
+    if(cards.length > 0) {
+        if(hideBtn.checked) {
+            const selected = allCards.filter((card) => card.Status !== "mastered");
+            cards.forEach((card,index) => {
+                if(card.classList.contains("active")) {
+                    selected[index].Question = newQuestion;
+                    selected[index].Answer = newAnswer;
+                }
+            });
+            localStorage.setItem("storedCards", JSON.stringify(allCards));
+            renderCards(selected);
+            updateList();
+            checkLabel();
+            if(currentCard > 1) {
+                currentCard -=1
+            } else {
+                currentCard = 0;
+            }
+            changeSlide(currentCard);
+        } else {
+            cards.forEach((card, index) => {
+                if(card.classList.contains("active")) {
+                    allCards[index].Question = newQuestion;
+                    allCards[index].Answer = newAnswer;
+                }
+            })
+            localStorage.setItem("storedCards", JSON.stringify(allCards));
+            renderCards(allCards);
+            updateList();
+            checkLabel();
+        }
+    }
+
+    closeModal();
+})

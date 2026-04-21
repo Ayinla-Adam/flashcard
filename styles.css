@@ -244,6 +244,16 @@ main {
     width: 100%;
 }
 
+.edit {
+    padding: 1rem 3rem;
+    border: 1px solid black;
+    background-color: transparent;
+    border-radius: 20px;
+    flex: 1;
+    min-width: fit-content;
+    width: 100%;
+}
+
 .control-btns {
     display: flex;
     align-items: center;
@@ -303,7 +313,7 @@ form {
     border-radius: 2rem;
 }
 
-.form-error {
+.form-error, .new-form-error {
     color: red;
     font-size: 1.4rem;
 }
@@ -318,4 +328,34 @@ form {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.overlay {
+    background-color: RGBa(0, 0, 0, .5);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
+.edit-form {
+    z-index: 100;
+    padding: 3rem;
+    border-radius: 10px;
+    background-color: pink;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+}
+
+.edit-btn {
+    width: 100%;
+    background-color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 2rem;
+}
+
+.hidden {
+    display: none;
 }

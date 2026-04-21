@@ -58,8 +58,9 @@
                         <button class="master">I know this</button>
                         <button class="reset">Reset Progress</button>
                         <button class="delete">Delete <span style="color: black; font-size: 2rem;">🗑</span> </button>
+                        <button class="edit">Edit Card</button>
                     </div>
-                    
+
                     <div class="control-btns">
                         <button class="prev-btn">< Previous</button>
                         <p class="number"></p>
@@ -90,6 +91,23 @@
         </div>
     </main>
 
+    <form class="edit-form hidden">
+        <div class="form-group">
+            <label for="new-question">Question:</label>
+            <input type="text" id="new-question" placeholder="Enter your question"/>
+            <p class="new-form-error" id="new-question-error"></p>
+        </div>
+    
+        <div class="form-group">
+            <label for="new-answer">Answer:</label>
+            <input type="text" id="new-answer" placeholder="Enter your answer" />
+            <p class="new-form-error" id="new-answer-error"></p>
+        </div>
+    
+        <button type="submit" class="edit-btn">Edit</button>
+    </form>
+
+    <div class="overlay hidden"></div>
 </body>
 
 </html>
