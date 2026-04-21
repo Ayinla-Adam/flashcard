@@ -274,7 +274,7 @@ document.querySelector(".reset").addEventListener("click", function() {
 })
 
 document.querySelector(".delete").addEventListener("click", function() {
-    if(window.confirm("Are you sure you want to delete this card?")) {
+    if(window.confirm("This will permanently delete this card")) {
         if(hideBtn.checked) {
             cards.forEach((card, index) => {
                 if(card.classList.contains("active")) {
@@ -315,6 +315,7 @@ document.querySelector(".delete").addEventListener("click", function() {
             }
             changeSlide(currentCard);
         }
+        return true;
     }
 });
 
