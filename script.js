@@ -273,8 +273,9 @@ document.querySelector(".reset").addEventListener("click", function() {
     checkLabel();
 })
 
-document.querySelector(".delete").addEventListener("click", function() {
-    if(window.confirm("This will permanently delete this card")) {
+document.querySelector(".delete").addEventListener("click", function(e) {
+    e.preventDefault();
+    if(window.confirm("This shall permanently delete this card")) {
         if(hideBtn.checked) {
             cards.forEach((card, index) => {
                 if(card.classList.contains("active")) {
