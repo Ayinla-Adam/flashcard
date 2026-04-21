@@ -363,6 +363,10 @@ form {
 .delete-modal {
     position: fixed;
     z-index: 100;
+    margin: 0 auto;
+    max-width: max-content;
+    width: 100%;
+    min-width: fit-content;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
