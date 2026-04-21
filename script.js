@@ -287,10 +287,15 @@ document.querySelector(".delete").addEventListener("click", function() {
             })
 
             const newSelected = allCards.filter((card) => card.Status !== "mastered");
-            checkLabel();
             renderCards(newSelected);
             updateList();
-            return true;
+            checkLabel();
+            if(currentCard > 1) {
+                currentCard -=1
+            } else {
+                currentCard = 0;
+            }
+            changeSlide(currentCard);
         } else {
             cards.forEach((card, index) => {
                 if(card.classList.contains("active")) {
