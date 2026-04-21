@@ -109,6 +109,15 @@ document.addEventListener("keydown", function(e) {
     }
 })
 
+
+document.querySelector("#question").addEventListener("focus", function() {
+    document.querySelectorAll(".form-error").forEach((error) => error.textContent = "");
+});
+
+document.querySelector("#answer").addEventListener("focus", function() {
+    document.querySelectorAll(".form-error").forEach((error) => error.textContent = "");
+});
+
 form.addEventListener("submit", function(e) {
     e.preventDefault();
     const question = document.getElementById("question").value;
@@ -118,7 +127,7 @@ form.addEventListener("submit", function(e) {
         document.querySelector("#question-error").textContent = "A question is required";
         return false;
     }
-
+    
     if(answer.trim() === "") {
         document.querySelector("#answer-error").textContent = "An answer is required";
         return false;
@@ -150,7 +159,12 @@ form.addEventListener("submit", function(e) {
     //     `
     // })
     
-    renderCards(allCards);
+    if(hideBtn.checked) {
+        const selected = allCards.filter((card) => card.Status !== "mastered");
+        renderCards(selected);
+    } else {
+        renderCards(allCards);
+    }
     updateList();
     checkLabel();
     alert("Flashcard successfully created");
@@ -257,3 +271,34 @@ document.querySelector(".reset").addEventListener("click", function() {
     updateList();
     checkLabel();
 })
+
+document.querySelector(".delete").addEventListener("click", function() {
+    if(window.confirm("Are you sure you want to delete this card?")) {
+        if(hideBtn.checked) {
+            cards.forEach((card, index) => {
+                if(card.classList.contains("active")) {
+                    const selected = allCards.filter((card) => card.Status !== "mastered");
+                    let number = allCards.findIndex(n => n === selected[index]);
+                    if(number !== -1) {
+                        allCards.splice(number, 1);
+                        localStorage.setItem("storedCards", JSON.stringify(allCards));
+                        const newSelected = allCards.filter((card) => card.Status !== "mastered");
+                        renderCards(newSelected);
+                        checkLabel();
+                        updateList();
+                    }
+                }
+            })
+        } else {
+            cards.forEach((card, index) => {
+                if(card.classList.contains("active")) {
+                    allCards.splice(index, 1);
+                    localStorage.setItem("storedCards", JSON.stringify(allCards))
+                    renderCards(allCards);
+                    checkLabel();
+                    updateList();
+                }
+            })
+        }
+    }
+}) 
