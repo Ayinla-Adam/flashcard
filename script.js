@@ -271,11 +271,25 @@ document.querySelector(".reset").addEventListener("click", function() {
     currentCard = 0;
     updateList();
     checkLabel();
-})
+});
 
-document.querySelector(".delete").addEventListener("click", function(e) {
+function openDeleteModal() {
+    document.querySelector(".overlay").classList.remove("hidden");
+    document.querySelector(".delete-modal").classList.remove("hidden");
+}
+
+function closeDeleteModal() {
+    document.querySelector(".overlay").classList.add("hidden");
+    document.querySelector(".delete-modal").classList.add("hidden");
+}
+
+document.querySelector(".delete").addEventListener("click", openDeleteModal);
+document.querySelector(".overlay").addEventListener("click", closeDeleteModal);
+document.querySelector("#noBtn").addEventListener("click", closeDeleteModal);
+
+document.querySelector("#yesBtn").addEventListener("click", function(e) {
     e.preventDefault();
-    if(window.confirm("This shall permanently delete this card")) {
+    
         if(hideBtn.checked) {
             cards.forEach((card, index) => {
                 if(card.classList.contains("active")) {
@@ -316,11 +330,8 @@ document.querySelector(".delete").addEventListener("click", function(e) {
             }
             changeSlide(currentCard);
         }
-        return true;
-    } else {
-        return false;
-    }
-});
+        closeDeleteModal();
+    });
 
 function openModal() {
     document.querySelector(".overlay").classList.remove("hidden");

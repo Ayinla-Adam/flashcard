@@ -357,5 +357,45 @@ form {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
+
+.delete-modal {
+    position: fixed;
+    z-index: 100;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 3rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.delete-flex {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+
+#yesBtn {
+    border: none;
+    background-color: #F06292;
+    color: white;
+    padding: 1rem 3rem;
+    border-radius: 20px;
+    font-size: 1.5rem;
+}
+
+#noBtn {
+    border: 1px solid RGBa(0, 0, 0, .5);
+    background-color: white;
+    padding: 1rem 3rem;
+    border-radius: 20px;
+    font-size: 1.5rem;
+}
+
