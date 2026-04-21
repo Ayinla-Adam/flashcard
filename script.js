@@ -316,6 +316,8 @@ document.querySelector(".delete").addEventListener("click", function() {
             changeSlide(currentCard);
         }
         return true;
+    } else {
+        return false;
     }
 });
 
