@@ -268,6 +268,7 @@ document.querySelector(".reset").addEventListener("click", function() {
 
     allCards.map((card) => card.Status = "not-mastered");
     renderCards(allCards);
+    currentCard = 0;
     updateList();
     checkLabel();
 })
@@ -385,6 +386,6 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
             checkLabel();
         }
     }
-
+    document.querySelector(".edit-form").reset();
     closeModal();
 })
