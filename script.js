@@ -20,7 +20,7 @@ function updateList() {
         cardsContent = document.querySelectorAll(".flash-card-content");
         cardsContent.forEach((content) => content.classList.remove("rotate"));
         if(cards.length > 0) {
-            cards[currentCard].classList.add("active");
+            cards[(currentCard + cards.length) % cards.length].classList.add("active");
         } else {
             cardsParent.innerHTML = `<h3 style="text-align: center;">Cards you add appear here</h3>`
         }
@@ -282,23 +282,28 @@ document.querySelector(".delete").addEventListener("click", function() {
                     if(number !== -1) {
                         allCards.splice(number, 1);
                         localStorage.setItem("storedCards", JSON.stringify(allCards));
-                        const newSelected = allCards.filter((card) => card.Status !== "mastered");
-                        renderCards(newSelected);
-                        checkLabel();
-                        updateList();
                     }
                 }
             })
+
+            const newSelected = allCards.filter((card) => card.Status !== "mastered");
+            renderCards(newSelected);
+            checkLabel();
+            updateList();
+            return true;
         } else {
             cards.forEach((card, index) => {
                 if(card.classList.contains("active")) {
                     allCards.splice(index, 1);
-                    localStorage.setItem("storedCards", JSON.stringify(allCards))
-                    renderCards(allCards);
-                    checkLabel();
-                    updateList();
                 }
             })
+
+            localStorage.setItem("storedCards", JSON.stringify(allCards))
+            renderCards(allCards);
+            currentCard -= 1;
+            changeSlide(currentCard);
+            updateList();
+            checkLabel();
         }
     }
 }) 
