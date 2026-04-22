@@ -602,6 +602,7 @@ function renderGroups() {
     }
     closeCategory();
 
+    updateWidth();
     checkTitle();
 }
 
@@ -733,5 +734,21 @@ function checkTitle() {
         }
     } else {
         title.textContent = "";
+    }
+}
+
+function updateWidth() {
+    const container = document.querySelector(".menu");
+    const subContainer = document.querySelector(".menu-content");
+    const children = [...subContainer.children];
+    
+    if(document.querySelectorAll(".single-category").length > 1) {
+        let maxWidth = 0;
+        children.forEach((child) => {
+            const width = child.offsetWidth;
+            if(width > maxWidth) maxWidth = width;
+        });
+    
+        container.style.width = `${maxWidth}px`;
     }
 }
