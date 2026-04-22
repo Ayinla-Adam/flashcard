@@ -411,6 +411,8 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
             localStorage.setItem("storedCards", JSON.stringify(allCards))
             renderCards(allCards);
             updateList();
+            updateCategory();
+            renderGroups();
             checkLabel();
             if(currentCard > 1) {
                 currentCard -=1
@@ -421,6 +423,7 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
         }
 
         updateCategory();
+        
     } else {
         cards.forEach((card, i) => {
             if(card.classList.contains("active")) {
@@ -581,6 +584,10 @@ function renderGroups() {
         category.classList.remove("content-control");
     })
 
+    if(document.querySelectorAll(".single-category").length  <= 1) {
+        document.querySelector(".menu-content").innerHTML += `<h4 class="single-category" style="pointer-events: none;">No current category</h4>`
+    }
+
     const firstCategory = menu.querySelector(".single-category");
     if (firstCategory) {
         firstCategory.classList.add("content-control");
@@ -651,7 +658,8 @@ function closeCategory() {
     })
     document.querySelector(".menu-content").classList.remove("shown");
 }
-
-if(document.querySelectorAll(".single-category").length  <= 1) {
-    document.querySelector(".menu-content").innerHTML += `<h4 class="single-category" style="pointer-events: none;">No current category</h4>`
-}
+// while(true) {
+    if(document.querySelectorAll(".single-category").length  <= 1) {
+        document.querySelector(".menu-content").innerHTML += `<h4 class="single-category" style="pointer-events: none;">No current category</h4>`
+    }
+// }
