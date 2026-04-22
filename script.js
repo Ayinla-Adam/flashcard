@@ -294,6 +294,7 @@ function updateSelected() {
         
         updateList();
         checkLabel();
+        checkTitle();
     } else {
         if(hideBtn.checked) {
             const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
@@ -311,7 +312,9 @@ function updateSelected() {
         }
         updateList();
         checkLabel();
+        checkTitle();
     }
+
 }
 
 
@@ -613,6 +616,26 @@ if (e.target.classList.contains("single-category") && !e.target.classList.contai
 }})
 
 function triggerCategory(card, index, activeIndex) {
+    if(hideBtn.checked) {
+         let selectedCategory = groups[card.innerHTML];
+        const involved = Object.keys(groups)
+        let categoryName = involved[index];
+        [involved[activeIndex], involved[index]] = [involved[index], involved[activeIndex]];
+        let newGroups = {};
+        for (let keys of involved) {
+            newGroups[keys] = groups[keys];
+        }
+    
+        groups = newGroups;
+        const data = groups[involved[0]]
+        const required = data.filter(((card) => card.Status !== "mastered"));
+        renderCards(required);
+        updateList();
+        checkLabel();
+        renderGroups();
+        changeSlide(currentCard);
+        updateSelected();
+    } else {
         let selectedCategory = groups[card.innerHTML];
         const involved = Object.keys(groups)
         let categoryName = involved[index];
@@ -630,6 +653,7 @@ function triggerCategory(card, index, activeIndex) {
         renderGroups();
         updateSelected();
     }
+}
 
 
 function showCategory() {
@@ -671,21 +695,41 @@ if(document.querySelectorAll(".single-category").length  <= 1) {
 function checkTitle() {
     const title = document.querySelector(".category-title");
     if(cards.length > 0) {
-
         if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
-            cards.forEach((card, index) => {
-                if(card.classList.contains("active")) {
-                    title.textContent = allCards[index].category;
-                }
-            });
+            if(hideBtn.checked) {
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const selected = allCards.filter((card) => card.Status !== "mastered");
+                        title.textContent = selected[index].category;
+                    }
+                });
+
+            } else {
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        title.textContent = allCards[index].category;
+                    }
+                });
+            }
         } else {
-            cards.forEach((card, index) => {
-                if(card.classList.contains("active")) {
-                    const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
-                    const category = groups[data];
-                    title.textContent = category[index].category;
-                }
-            })
+            if(hideBtn.checked) {
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                        const category = groups[data];
+                        const required = category.filter((card) => card.Status !== "mastered");
+                        title.textContent = required[index].category;
+                    }
+                })
+            } else {
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                        const category = groups[data];
+                        title.textContent = category[index].category;
+                    }
+                })
+            }
         }
     } else {
         title.textContent = "";

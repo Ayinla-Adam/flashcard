@@ -264,7 +264,7 @@ main {
 .form-container {
     width: 100%;
     flex: 1;
-    min-width: fit-content;
+    min-width: 40.4rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -397,10 +397,10 @@ form {
 }
 
 .menu {
-    width: 10rem;
+    width: 12rem;
     position: relative;
     left: -15px;
-    margin-bottom: 4rem;
+    margin-bottom: 4.2rem;
 }
 
 .menu-content {
