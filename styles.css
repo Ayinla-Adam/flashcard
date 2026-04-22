@@ -104,7 +104,8 @@ main {
 .flash-card-container {
     width: 100%;
     background-color: rgb(255, 192, 242);
-    height: 35vh;
+    height: 100%;
+    min-height: max-content;
     border-radius: 12px;
     padding: 1rem 0;
     display: flex;
@@ -117,6 +118,7 @@ main {
 .flash-cards {
     width: 100%;
     position: relative;
+    transform: translateY(-50%);
 }
 
 .flash-card {
@@ -439,4 +441,11 @@ form {
 
 .single-category.shown {
     display: block !important;
+}
+
+.category-title {
+    border: 1px solid black;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background-color: white;
 }

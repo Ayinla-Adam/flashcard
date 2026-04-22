@@ -26,6 +26,7 @@ function updateList() {
         }
 }
 
+
 // if(allCards.length < 1) {
 //     prevBtn.disabled = true;
 //     nextBtn.disabled = true;
@@ -93,7 +94,9 @@ function changeSlide(index) {
         currentCard = (index + cards.length) % cards.length;
         cards[currentCard].classList.add("active")
         checkLabel();
+        checkTitle()
     }
+
 };
 
 
@@ -184,6 +187,7 @@ form.addEventListener("submit", function(e) {
     updateList();
     updateCategory();
     checkLabel();
+    checkTitle();
     alert("Flashcard successfully created");
     form.reset();
     // }
@@ -594,6 +598,8 @@ function renderGroups() {
         firstCategory.innerHTML += `&#9660;`
     }
     closeCategory();
+
+    checkTitle();
 }
 
 renderGroups();
@@ -658,8 +664,30 @@ function closeCategory() {
     })
     document.querySelector(".menu-content").classList.remove("shown");
 }
-// while(true) {
-    if(document.querySelectorAll(".single-category").length  <= 1) {
-        document.querySelector(".menu-content").innerHTML += `<h4 class="single-category" style="pointer-events: none;">No current category</h4>`
+if(document.querySelectorAll(".single-category").length  <= 1) {
+    document.querySelector(".menu-content").innerHTML += `<h4 class="single-category" style="pointer-events: none;">No current category</h4>`
+}
+
+function checkTitle() {
+    const title = document.querySelector(".category-title");
+    if(cards.length > 0) {
+
+        if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+            cards.forEach((card, index) => {
+                if(card.classList.contains("active")) {
+                    title.textContent = allCards[index].category;
+                }
+            });
+        } else {
+            cards.forEach((card, index) => {
+                if(card.classList.contains("active")) {
+                    const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                    const category = groups[data];
+                    title.textContent = category[index].category;
+                }
+            })
+        }
+    } else {
+        title.textContent = "";
     }
-// }
+}
