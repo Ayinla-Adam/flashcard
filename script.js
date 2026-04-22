@@ -66,7 +66,7 @@ function checkLabel() {
 
     if(cards.length > 0) {
         labels.forEach((label) => {
-            label.textContent = `${currentCard + 1} of ${cards.length}`;
+            label.textContent = `${(currentCard + 1)} of ${cards.length}`;
         });
         
         progress.style.width = `${(currentCard + 1) / cards.length * 100}%`;
@@ -118,10 +118,15 @@ document.querySelector("#answer").addEventListener("focus", function() {
     document.querySelectorAll(".form-error").forEach((error) => error.textContent = "");
 });
 
+document.querySelector("#category").addEventListener("focus", function() {
+    document.querySelectorAll(".form-error").forEach((error) => error.textContent = "");
+})
+
 form.addEventListener("submit", function(e) {
     e.preventDefault();
     const question = document.getElementById("question").value;
     const answer = document.getElementById("answer").value;
+    const category = document.getElementById("category").value
     
     if(question.trim() === "") {
         document.querySelector("#question-error").textContent = "A question is required";
@@ -133,14 +138,22 @@ form.addEventListener("submit", function(e) {
         return false;
     }
 
+    if(category.trim() === "") {
+        document.querySelector("#category-error").textContent = "A category is required";
+        return false;
+    }
+
     const collectedData = {
         Question: question,
         Answer: answer,
         Status: "not-mastered",
+        category: category,
     };
     
     allCards.push(collectedData);
     localStorage.setItem("storedCards", JSON.stringify(allCards));
+    updateCategory();
+    renderGroups();
     
     // cardsParent.innerHTML = allCards.map((card) => {
     //     return `
@@ -158,14 +171,18 @@ form.addEventListener("submit", function(e) {
     //             </div>
     //     `
     // })
-    
-    if(hideBtn.checked) {
-        const selected = allCards.filter((card) => card.Status !== "mastered");
-        renderCards(selected);
+    if(document.querySelector(".content-control").innerHTML === "All category") {
+        if(hideBtn.checked) {
+            const selected = allCards.filter((card) => card.Status !== "mastered");
+            renderCards(selected);
+        } else {
+            renderCards(allCards);
+        }
     } else {
-        renderCards(allCards);
+        renderCards(groups[Object.keys(groups)[0]]);
     }
     updateList();
+    updateCategory();
     checkLabel();
     alert("Flashcard successfully created");
     form.reset();
@@ -192,55 +209,105 @@ const masterBtn = document.querySelector(".master");
 const hideBtn = document.querySelector("#hide-mastered");
 
 masterBtn.addEventListener("click", function() {
-    if(hideBtn.checked) {
-        cards.forEach((card, index) => {
-            if(card.classList.contains("active")) {
-                const selected = allCards.filter((cards) => cards.Status !== "mastered");
-                selected[index].Status = "mastered";
-                localStorage.setItem("storedCards", JSON.stringify(allCards))
-            }
-        })
+    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+
+        if(hideBtn.checked) {
+            cards.forEach((card, index) => {
+                if(card.classList.contains("active")) {
+                    const selected = allCards.filter((cards) => cards.Status !== "mastered");
+                    selected[index].Status = "mastered";
+                    localStorage.setItem("storedCards", JSON.stringify(allCards))
+                }
+            })
+        } else {
+            cards.forEach((card, index) => {
+                if(card.classList.contains("active")) {
+                    allCards[index].Status = "mastered";
+                    localStorage.setItem("storedCards", JSON.stringify(allCards));
+                }
+            })
+
+        }
+
+        updateSelected();
+        currentCard += 1;
+        changeSlide(currentCard)
     } else {
-        cards.forEach((card, index) => {
-            if(card.classList.contains("active")) {
-                allCards[index].Status = "mastered";
-                localStorage.setItem("storedCards", JSON.stringify(allCards))
-            }
-        })
+        if(hideBtn.checked) {
+            cards.forEach((card, i) => {
+                if(card.classList.contains("active")) {
+                    const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                    const category = groups[data]
+                    const required = category.filter(c => c.Status !== "mastered");
+                    const index = allCards.indexOf(required[i]);
+                    required[i].Status = "mastered";
+                    allCards[index].Status = "mastered";
+                }
+            });
+        } else {
+            cards.forEach((card, i) => {
+                if(card.classList.contains("active")) {
+                    const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                    const category = groups[data]
+                    const index = allCards.indexOf(category[i]);
+                    category[i].Status = "mastered";
+                    allCards[index].Status = "mastered";
+                }
+            })
+        }
+        updateSelected();
+        currentCard += 1;
+        changeSlide(currentCard);
     }
 
-    updateSelected();
-    currentCard += 1;
-    changeSlide(currentCard)
 })
 
 function updateSelected() {
-    if(hideBtn.checked) {
-        // cards.forEach((flashcard, index) => {
-            //         if(!flashcard.classList.contains("mastered")) {
-                //             console.log(index);
-                //             shown.push(allCards[index]);
-        //         }
-        //     });        
-        
-        currentCard = 0;
-        let shown = allCards.filter((card) => {
-            return card.Status !== "mastered";
-        })
-        // cards.forEach((card, index) => {
-            //     if(card.classList.contains("mastered")) {
+    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+        if(hideBtn.checked) {
+            // cards.forEach((flashcard, index) => {
+                //         if(!flashcard.classList.contains("mastered")) {
+                    //             console.log(index);
+                    //             shown.push(allCards[index]);
+            //         }
+            //     });        
             
-            //     }
-        
-            // })
+            currentCard = 0;
+            let shown = allCards.filter((card) => {
+                return card.Status !== "mastered";
+            })
+            // cards.forEach((card, index) => {
+                //     if(card.classList.contains("mastered")) {
+                
+                //     }
             
-            renderCards(shown);
+                // })
+                
+                renderCards(shown);
+        } else {
+            renderCards(allCards);
+        }
+        
+        updateList();
+        checkLabel();
     } else {
-        renderCards(allCards);
+        if(hideBtn.checked) {
+            const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+            const category = groups[data];
+            currentCard = 0;
+            let shown = category.filter((card) => {
+                return card.Status !== "mastered";
+            });
+
+            renderCards(shown);
+        } else {
+            const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+            const category = groups[data];
+            renderCards(category);
+        }
+        updateList();
+        checkLabel();
     }
-    
-    updateList();
-    checkLabel();
 }
 
 
@@ -265,12 +332,25 @@ document.querySelector(".shuffle").addEventListener("click", function() {
 })
  
 document.querySelector(".reset").addEventListener("click", function() {
-
-    allCards.map((card) => card.Status = "not-mastered");
-    renderCards(allCards);
-    currentCard = 0;
-    updateList();
-    checkLabel();
+    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+        allCards.map((card) => card.Status = "not-mastered");
+        renderCards(allCards);
+        currentCard = 0;
+        updateList();
+        checkLabel();
+    } else {
+        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+        const category = groups[data];
+        category.filter((card, i) => {
+            card.Status = "not-mastered";
+            let index = allCards.indexOf(category[i]);
+            allCards[index].status = "not-mastered";
+        })
+        renderCards(category);
+        currentCard = 0;
+        updateList();
+        checkLabel();
+    }
 });
 
 function openDeleteModal() {
@@ -290,6 +370,8 @@ document.querySelector("#noBtn").addEventListener("click", closeDeleteModal);
 document.querySelector("#yesBtn").addEventListener("click", function(e) {
     e.preventDefault();
     
+    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+
         if(hideBtn.checked) {
             cards.forEach((card, index) => {
                 if(card.classList.contains("active")) {
@@ -330,6 +412,25 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
             }
             changeSlide(currentCard);
         }
+
+        updateCategory();
+    } else {
+        cards.forEach((card, i) => {
+            if(card.classList.contains("active")) {
+                const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                const category = groups[data];
+                const index = allCards.indexOf(category[i]);
+                allCards.splice(index, 1);
+                category.splice(i, 1);
+                console.log(index);
+                localStorage.setItem("storedCards", JSON.stringify(allCards));
+            }
+            renderCards(allCards)
+            updateCategory();
+            renderGroups();
+            checkLabel();
+        })
+    }
         closeDeleteModal();
     });
 
@@ -370,37 +471,175 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
     }
 
     if(cards.length > 0) {
-        if(hideBtn.checked) {
-            const selected = allCards.filter((card) => card.Status !== "mastered");
-            cards.forEach((card,index) => {
-                if(card.classList.contains("active")) {
-                    selected[index].Question = newQuestion;
-                    selected[index].Answer = newAnswer;
+        if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+
+            if(hideBtn.checked) {
+                const selected = allCards.filter((card) => card.Status !== "mastered");
+                cards.forEach((card,index) => {
+                    if(card.classList.contains("active")) {
+                        selected[index].Question = newQuestion;
+                        selected[index].Answer = newAnswer;
+                    }
+                });
+                localStorage.setItem("storedCards", JSON.stringify(allCards));
+                renderCards(selected);
+                updateList();
+                checkLabel();
+                if(currentCard > 1) {
+                    currentCard -=1
+                } else {
+                    currentCard = 0;
                 }
-            });
-            localStorage.setItem("storedCards", JSON.stringify(allCards));
-            renderCards(selected);
-            updateList();
-            checkLabel();
-            if(currentCard > 1) {
-                currentCard -=1
+                changeSlide(currentCard);
             } else {
-                currentCard = 0;
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        allCards[index].Question = newQuestion;
+                        allCards[index].Answer = newAnswer;
+                    }
+                })
+                localStorage.setItem("storedCards", JSON.stringify(allCards));
+                renderCards(allCards);
+                updateList();
+                checkLabel();
             }
-            changeSlide(currentCard);
         } else {
-            cards.forEach((card, index) => {
+            cards.forEach((card, i) => {
                 if(card.classList.contains("active")) {
+                    const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                    const category = groups[data];
+                    const index = allCards.indexOf(category[i]);
                     allCards[index].Question = newQuestion;
                     allCards[index].Answer = newAnswer;
+                    category[i].Question = newQuestion;
+                    category[i].Answer = newAnswer;
                 }
             })
+
             localStorage.setItem("storedCards", JSON.stringify(allCards));
             renderCards(allCards);
+            updateCategory();
+            renderGroups();
             updateList();
             checkLabel();
+
         }
     }
     document.querySelector(".edit-form").reset();
     closeModal();
-})
+});
+
+let groups = {}
+
+function updateCategory() {
+    groups = {"All category": allCards};
+    
+    for(let card of allCards) {
+        let categoryName = card.category;
+    
+        if(!groups[categoryName]) {
+            groups[categoryName] = [];
+        }
+    
+        groups[categoryName].push(card);
+        console.log(groups)
+    };
+    
+}
+
+// function checkCategory() {
+//     groups = {"All category" : allCards};
+
+//     for(let card of allCards) {
+//         let categoryName = card.category;
+//         if(!groups[categoryName]) {
+//             groups[categoryName] = []
+//         }
+//     }
+// }
+
+updateCategory();
+
+
+function renderGroups() {
+    const menu = document.getElementById("category-menu");
+    
+    menu.innerHTML = Object.keys(groups).map((group) => {
+        return `<p class="single-category">${group}</p>`;
+    }).join("");
+
+    // Always make the first one active after a swap
+    document.querySelectorAll(".single-category").forEach((category) => {
+        category.classList.remove("content-control");
+    })
+
+    const firstCategory = menu.querySelector(".single-category");
+    if (firstCategory) {
+        firstCategory.classList.add("content-control");
+        firstCategory.innerHTML += `&#9660;`
+    }
+    closeCategory();
+}
+
+renderGroups();
+
+document.getElementById("category-menu").addEventListener("click", (e) => {
+if (e.target.classList.contains("single-category") && !e.target.classList.contains("content-control")) {
+    const allCategories = Array.from(document.querySelectorAll(".single-category"));
+    const clickedIndex = allCategories.indexOf(e.target)
+    const activeIndex = allCategories.findIndex((category) => category.classList.contains("content-control"));
+    triggerCategory(e.target, clickedIndex, activeIndex)
+}})
+
+function triggerCategory(card, index, activeIndex) {
+        let selectedCategory = groups[card.innerHTML];
+        const involved = Object.keys(groups)
+        let categoryName = involved[index];
+        [involved[activeIndex], involved[index]] = [involved[index], involved[activeIndex]];
+        let newGroups = {};
+        for (let keys of involved) {
+            newGroups[keys] = groups[keys];
+        }
+    
+        groups = newGroups;
+        renderCards(groups[involved[0]]);
+        updateList();
+        changeSlide(currentCard);
+        checkLabel();
+        renderGroups();
+        updateSelected();
+    }
+
+
+function showCategory() {
+    document.querySelector("#category-menu").classList.add("shown");
+    
+    document.querySelectorAll(".single-category").forEach((category) => {
+        if(!category.classList.contains("content-control")) {
+            category.classList.add("shown");
+        }
+    });
+}
+
+document.querySelector(".menu-content").addEventListener("click", function(e) {
+    if(e.target.classList.contains("content-control")) {
+        if(!document.querySelector(".menu-content").classList.contains("shown")) {
+            showCategory()
+        } else {
+            closeCategory();
+        }
+    }
+});
+
+// document.querySelector("#category-menu").addEventListener("click", (e) => {
+//     const clicked = e.target.closest(".single-category");
+//     if(!clicked) return;
+//     clicked.classList.toggle("shown");    
+// });
+
+function closeCategory() {
+    document.querySelectorAll(".single-category").forEach((category) => {
+        category.classList.remove("shown");
+    })
+    document.querySelector(".menu-content").classList.remove("shown");
+}

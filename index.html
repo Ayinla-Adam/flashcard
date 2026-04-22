@@ -28,11 +28,16 @@
                 <div class="study">
                     <div class="study-flex">
                         <div class="display-control">
-                            <button class="content-control">CARDS</button>
-                            <div class="hide-mastered">
-                                <input type="checkbox" value="hide" id="hide-mastered" />
-                                <label for="hide-mastered">Hide Mastered</label>
+                            <div class="menu">
+                                <!-- <button class="content-control">All Category</button> -->
+                                <div class="menu-content" id="category-menu">
+                                    
+                                </div>
                             </div>
+                        </div>
+                        <div class="hide-mastered">
+                            <input type="checkbox" value="hide" id="hide-mastered" />
+                            <label for="hide-mastered">Hide Mastered</label>
                         </div>
 
                         <button class="shuffle">Shuffle</button>
@@ -84,6 +89,12 @@
                     <label for="answer">Answer:</label>
                     <input type="text" id="answer" placeholder="Enter your answer" />
                     <p class="form-error" id="answer-error"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" id="category" placeholder="Enter a category" />
+                    <p class="form-error" id="category-error"></p>
                 </div>
     
                 <button type="submit" class="add-btn">ADD</button>
