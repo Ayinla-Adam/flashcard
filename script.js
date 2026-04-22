@@ -626,7 +626,9 @@ function triggerCategory(card, index, activeIndex) {
     }
 
 
-function showCategory() {    
+function showCategory() {
+    document.querySelector("#category-menu").classList.add("shown");
+    
     document.querySelectorAll(".single-category").forEach((category) => {
         if(!category.classList.contains("content-control")) {
             category.classList.add("shown");
@@ -654,4 +656,10 @@ function closeCategory() {
     document.querySelectorAll(".single-category").forEach((category) => {
         category.classList.remove("shown");
     })
+    document.querySelector(".menu-content").classList.remove("shown");
 }
+// while(true) {
+    if(document.querySelectorAll(".single-category").length  <= 1) {
+        document.querySelector(".menu-content").innerHTML += `<h4 class="single-category" style="pointer-events: none;">No current category</h4>`
+    }
+// }
