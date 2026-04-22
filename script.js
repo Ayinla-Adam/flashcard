@@ -327,8 +327,15 @@ function shuffleCards(array) {
 }
 
 document.querySelector(".shuffle").addEventListener("click", function() {
-    localStorage.setItem("storedCards", JSON.stringify(shuffleCards(allCards)));
-    renderCards(allCards);
+    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All mastered") {
+        localStorage.setItem("storedCards", JSON.stringify(shuffleCards(allCards)));
+        renderCards(allCards);
+    } else {
+        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+        let category = groups[data];
+        category = shuffleCards(category);
+        renderCards(category);
+    }
 })
  
 document.querySelector(".reset").addEventListener("click", function() {
