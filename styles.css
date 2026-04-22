@@ -441,5 +441,5 @@ form {
 }
 
 .menu-content.shown {
-    transform: translate(-10%, -18%) !important;
+    margin-top: 2rem;
 }

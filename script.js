@@ -585,7 +585,7 @@ function renderGroups() {
     })
 
     if(document.querySelectorAll(".single-category").length  <= 1) {
-        document.querySelector(".menu-content").innerHTML += `<h4 class="single-category" style="pointer-events: none;">No current category</h4>`
+        document.querySelector(".menu-content").innerHTML += `<h4 class="single-category" style="pointer-events: none;">empty</h4>`
     }
 
     const firstCategory = menu.querySelector(".single-category");
