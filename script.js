@@ -431,7 +431,8 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
                 category.splice(i, 1);
                 console.log(index);
                 localStorage.setItem("storedCards", JSON.stringify(allCards));
-            }
+            };
+
             renderCards(allCards)
             updateCategory();
             renderGroups();
@@ -649,4 +650,8 @@ function closeCategory() {
         category.classList.remove("shown");
     })
     document.querySelector(".menu-content").classList.remove("shown");
+}
+
+if(document.querySelectorAll(".single-category").length  <= 1) {
+    document.querySelector(".menu-content").innerHTML += `<h4 class="single-category" style="pointer-events: none;">No current category</h4>`
 }
