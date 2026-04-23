@@ -14,7 +14,7 @@
         <div class="container">
             <div class="title">
                 <div class="logo-wrapper">
-                    <img src="./DESIGNS/image.png" width="50" height = "50" alt="logo" />
+                    <img src="./DESIGNS/image.png" width="50" height="50" alt="logo" />
                     <h2>Flashcard</h2>
                 </div>
 
@@ -31,7 +31,7 @@
                             <div class="menu">
                                 <!-- <button class="content-control">All Category</button> -->
                                 <div class="menu-content" id="category-menu">
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -48,9 +48,9 @@
                         <div class="flash-card-container">
                             <h4 class="category-title"></h4>
                             <div class="flash-cards">
-                                
+
                             </div>
-                            
+
                             <div class="progress-flex">
                                 <div class="progress-bar"><span class="progress-content"></span></div>
                                 <p class="known-label"></p>
@@ -60,16 +60,45 @@
                     </div>
 
                     <div class="flash-flex">
-                        <button class="master">I know this</button>
-                        <button class="reset">Reset Progress</button>
-                        <button class="delete">Delete <span style="color: black; font-size: 2rem;">🗑</span> </button>
-                        <button class="edit">Edit Card</button>
+                        <button class="master"><svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 21a9 9 0 1 1 0-18c1.052 0 2.062.18 3 .512M7 9.577l3.923 3.923 8.5-8.5M17 14v6m-3-3h6" />
+                            </svg>
+                            I know this</button>
+                        <button class="reset"><svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4" />
+                            </svg>
+                            Reset Progress</button>
+                        <button class="delete"><svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                            </svg>
+                            Delete</button>
+                        <button class="edit"><svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                            </svg>
+                            Edit Card</button>
                     </div>
 
                     <div class="control-btns">
-                        <button class="prev-btn">< Previous</button>
-                        <p class="number"></p>
-                        <button class="next-btn">Next ></button>
+                        <button class="prev-btn">
+                            <span><</span> Previous</button>
+                                <p class="number"></p>
+                                <button class="next-btn">Next <span>></span></button>
                     </div>
                 </div>
             </div>
@@ -81,10 +110,10 @@
             <form>
                 <div class="form-group">
                     <label for="question">Question:</label>
-                    <input type="text" id="question" placeholder="Enter your question"/>
+                    <input type="text" id="question" placeholder="Enter your question" />
                     <p class="form-error" id="question-error"></p>
                 </div>
-    
+
                 <div class="form-group">
                     <label for="answer">Answer:</label>
                     <input type="text" id="answer" placeholder="Enter your answer" />
@@ -96,7 +125,7 @@
                     <input type="text" id="category" placeholder="Enter a category" />
                     <p class="form-error" id="category-error"></p>
                 </div>
-    
+
                 <button type="submit" class="add-btn">ADD</button>
             </form>
         </div>
@@ -105,25 +134,25 @@
     <form class="edit-form hidden">
         <div class="form-group">
             <label for="new-question">Question:</label>
-            <input type="text" id="new-question" placeholder="Enter your question"/>
+            <input type="text" id="new-question" placeholder="Enter your question" />
             <p class="new-form-error" id="new-question-error"></p>
         </div>
-    
+
         <div class="form-group">
             <label for="new-answer">Answer:</label>
             <input type="text" id="new-answer" placeholder="Enter your answer" />
             <p class="new-form-error" id="new-answer-error"></p>
         </div>
-    
+
         <button type="submit" class="edit-btn">Edit</button>
     </form>
 
     <div class="delete-modal hidden">
-    <p>Are you sure you want to permanently delete this card?</p>        
-    <div class="delete-flex">
-        <button id="yesBtn">Yes</button>
-        <button id="noBtn">No</button>
-    </div>
+        <p>Are you sure you want to permanently delete this card?</p>
+        <div class="delete-flex">
+            <button id="yesBtn">Yes</button>
+            <button id="noBtn">No</button>
+        </div>
     </div>
 
     <div class="overlay hidden"></div>

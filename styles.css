@@ -204,6 +204,14 @@ main {
     flex-wrap: wrap;
 }
 
+.flash-flex button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    justify-content: center;
+}
+
 .master {
     padding: 1rem 3rem;
     border-radius: 20px;
@@ -257,10 +265,20 @@ main {
 }
 
 .control-btns button {
+    font-size: 1.2rem;
     padding: 1rem 2rem;
     border: 1px solid black;
     background-color: transparent;
     border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.control-btns button  span {
+    font-weight: 700 !important;
+    font-size: 1.5rem;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .form-container {
@@ -439,7 +457,10 @@ form {
     background: transparent;
     border: 1px solid black;
     border-radius: 50px;
-    display: block;
+    /* display: block; */
+    display: flex;
+    align-items: center;
+    align-items: center;
 }
 
 .single-category.shown {
@@ -452,4 +473,15 @@ form {
     padding: 0.5rem 1rem;
     border-radius: 20px;
     background-color: white;
+}
+
+.arrow {
+    display: inline-block;
+    transition: all 0.4s;
+    margin-left: 1rem;
+    font-weight: 400;
+}
+
+.arrow.shown {
+    transform: rotate(180deg);
 }

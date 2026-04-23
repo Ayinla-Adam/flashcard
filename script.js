@@ -216,7 +216,7 @@ const masterBtn = document.querySelector(".master");
 const hideBtn = document.querySelector("#hide-mastered");
 
 masterBtn.addEventListener("click", function() {
-    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
 
         if(hideBtn.checked) {
             cards.forEach((card, index) => {
@@ -259,7 +259,7 @@ masterBtn.addEventListener("click", function() {
         if(hideBtn.checked) {
             cards.forEach((card, i) => {
                 if(card.classList.contains("active")) {
-                    const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
                     const category = groups[data]
                     const required = category.filter(c => c.Status !== "mastered");
                     const index = allCards.indexOf(required[i]);
@@ -279,7 +279,7 @@ masterBtn.addEventListener("click", function() {
         } else {
             cards.forEach((card, i) => {
                 if(card.classList.contains("active")) {
-                    const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
                     const category = groups[data]
                     const index = allCards.indexOf(category[i]);
                     if(category[i].known === 5) {
@@ -304,7 +304,7 @@ masterBtn.addEventListener("click", function() {
 })
 
 function updateSelected() {
-    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
         if(hideBtn.checked) {
             // cards.forEach((flashcard, index) => {
                 //         if(!flashcard.classList.contains("mastered")) {
@@ -335,7 +335,7 @@ function updateSelected() {
         renderKnown();
     } else {
         if(hideBtn.checked) {
-            const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+            const data = document.querySelector(".content-control").textContent.slice(0, -1);
             const category = groups[data];
             currentCard = 0;
             let shown = category.filter((card) => {
@@ -345,7 +345,7 @@ function updateSelected() {
             renderCards(shown);
             renderKnown();
         } else {
-            const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+            const data = document.querySelector(".content-control").textContent.slice(0, -1);
             const category = groups[data];
             renderCards(category);
         }
@@ -376,7 +376,7 @@ function shuffleCards(array) {
 }
 
 document.querySelector(".shuffle").addEventListener("click", function() {
-    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
         if(hideBtn.checked) {
             let indexToFilter = []
             const required = allCards.filter((card, index) => {
@@ -400,7 +400,7 @@ document.querySelector(".shuffle").addEventListener("click", function() {
             checkTitle();
         }
     } else {
-        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+        const data = document.querySelector(".content-control").textContent.slice(0, -1);
         let category = groups[data];
         category = shuffleCards(category);
         renderCards(category);
@@ -408,7 +408,7 @@ document.querySelector(".shuffle").addEventListener("click", function() {
 })
  
 document.querySelector(".reset").addEventListener("click", function() {
-    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
         allCards.map((card) => {
             card.Status = "not-mastered";
             card.known = 0;
@@ -421,7 +421,7 @@ document.querySelector(".reset").addEventListener("click", function() {
         checkTitle();
         localStorage.setItem("storedCards", JSON.stringify(allCards));
     } else {
-        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+        const data = document.querySelector(".content-control").textContent.slice(0, -1);
         const category = groups[data];
         category.filter((card, i) => {
             card.Status = "not-mastered";
@@ -455,7 +455,7 @@ document.querySelector("#noBtn").addEventListener("click", closeDeleteModal);
 document.querySelector("#yesBtn").addEventListener("click", function(e) {
     e.preventDefault();
     
-    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
 
         if(hideBtn.checked) {
             cards.forEach((card, index) => {
@@ -505,7 +505,7 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
     } else {
         cards.forEach((card, i) => {
             if(card.classList.contains("active")) {
-                const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                const data = document.querySelector(".content-control").textContent.slice(0, -1);
                 const category = groups[data];
                 const index = allCards.indexOf(category[i]);
                 allCards.splice(index, 1);
@@ -560,7 +560,7 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
     }
 
     if(cards.length > 0) {
-        if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
 
             if(hideBtn.checked) {
                 const selected = allCards.filter((card) => card.Status !== "mastered");
@@ -595,7 +595,7 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
         } else {
             cards.forEach((card, i) => {
                 if(card.classList.contains("active")) {
-                    const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
                     const category = groups[data];
                     const index = allCards.indexOf(category[i]);
                     allCards[index].Question = newQuestion;
@@ -668,7 +668,7 @@ function renderGroups() {
     const firstCategory = menu.querySelector(".single-category");
     if (firstCategory) {
         firstCategory.classList.add("content-control");
-        firstCategory.innerHTML += `&#9660;`
+        firstCategory.innerHTML += `<span class="arrow">&#9660;</span>`
     }
     closeCategory();
 
@@ -736,6 +736,7 @@ function showCategory() {
         if(!category.classList.contains("content-control")) {
             category.classList.add("shown");
         }
+        document.querySelector(".arrow").classList.add("shown");
     });
 }
 
@@ -760,6 +761,7 @@ function closeCategory() {
         category.classList.remove("shown");
     })
     document.querySelector(".menu-content").classList.remove("shown");
+    if(document.querySelector(".arrow")) document.querySelector(".arrow").classList.remove("shown");
 }
 if(document.querySelectorAll(".single-category").length  <= 1) {
     document.querySelector(".menu-content").innerHTML += `<h4 class="single-category" style="pointer-events: none;">No current category</h4>`
@@ -768,7 +770,7 @@ if(document.querySelectorAll(".single-category").length  <= 1) {
 function checkTitle() {
     const title = document.querySelector(".category-title");
     if(cards.length > 0) {
-        if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
             if(hideBtn.checked) {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
@@ -788,7 +790,7 @@ function checkTitle() {
             if(hideBtn.checked) {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
-                        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
                         const category = groups[data];
                         const required = category.filter((card) => card.Status !== "mastered");
                         title.textContent = required[index].category;
@@ -797,7 +799,7 @@ function checkTitle() {
             } else {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
-                        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
                         const category = groups[data];
                         title.textContent = category[index].category;
                     }
@@ -829,7 +831,7 @@ function renderKnown() {
     const label = document.querySelector(".known-label");
     if(cards.length > 0) {
         const progress = document.querySelector(".progress-content")
-        if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
             if(hideBtn.checked) {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
@@ -851,7 +853,7 @@ function renderKnown() {
             if(hideBtn.checked) {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
-                        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
                         const category = groups[data];
                         const filtered = category.filter((c) => c.Status !== "mastered");
                         label.textContent = `${filtered[index].known}/5`;
@@ -861,7 +863,7 @@ function renderKnown() {
             } else {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
-                        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
                         const category = groups[data];
                         label.textContent = `${(category[index].known)}/5`
                         progress.style.width = `${((category[index].known) / 5) * 100}%`;
