@@ -815,14 +815,14 @@ function renderKnown() {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
                         const filtered = allCards.filter((c) => c.Status !== "mastered");
-                        label.textContent = `${filtered[index].known} of 5`;
+                        label.textContent = `${filtered[index].known}/5`;
                         progress.style.width = `${((filtered[index].known) / 5) * 100}%`;
                     }
                 })
             } else {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
-                        label.textContent = `${allCards[index].known} of 5`;
+                        label.textContent = `${allCards[index].known}/5`;
                         progress.style.width = `${((allCards[index].known) / 5) * 100}%`;
                     }
                 })
@@ -835,7 +835,7 @@ function renderKnown() {
                         const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
                         const category = groups[data];
                         const filtered = category.filter((c) => c.Status !== "mastered");
-                        label.textContent = `${filtered[index].known} of 5`;
+                        label.textContent = `${filtered[index].known}/5`;
                         progress.style.width = `${((filtered[index].known) / 5) * 100}%`;
                     }
                 })
@@ -844,7 +844,7 @@ function renderKnown() {
                     if(card.classList.contains("active")) {
                         const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
                         const category = groups[data];
-                        label.textContent = `${(category[index].known)} of 5`
+                        label.textContent = `${(category[index].known)}/5`
                         progress.style.width = `${((category[index].known) / 5) * 100}%`;
                     }
                 })
