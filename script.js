@@ -225,6 +225,9 @@ masterBtn.addEventListener("click", function() {
                         selected[index].Status = "mastered";
                     } else {
                         selected[index].known += 1;
+                        if(selected[index.known === 5]) {
+                            selected[index].Status = "mastered";
+                        }
                     }
 
                     localStorage.setItem("storedCards", JSON.stringify(allCards))
@@ -237,6 +240,9 @@ masterBtn.addEventListener("click", function() {
                         allCards[index].Status = "mastered";
                     } else {
                         allCards[index].known += 1;
+                        if(allCards[index].known === 5) {
+                            allCards[index].Status = "mastered";
+                        }
                     }
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                 }
@@ -260,6 +266,10 @@ masterBtn.addEventListener("click", function() {
                         allCards[index].Status = "mastered";
                     } else {
                         required[i].known += 1;
+                        if(required[i].known === 5) {
+                            required[i].Status = "mastered";
+                            allCards[index].Status = "mastered";
+                        }
                     }
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                 }
@@ -275,6 +285,10 @@ masterBtn.addEventListener("click", function() {
                         allCards[index].Status = "mastered";
                     } else {
                         category[i].known += 1;
+                        if(category[i].known === 5) {
+                            category[i].Status = "mastered";
+                            allCards[index].Status = "mastered";
+                        }
                     }
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                 }
@@ -327,6 +341,7 @@ function updateSelected() {
             });
 
             renderCards(shown);
+            renderKnown();
         } else {
             const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
             const category = groups[data];
@@ -335,6 +350,7 @@ function updateSelected() {
         updateList();
         checkLabel();
         checkTitle();
+        renderKnown();
     }
 
 }
@@ -807,8 +823,8 @@ function updateWidth() {
 }
 
 function renderKnown() {
+    const label = document.querySelector(".known-label");
     if(cards.length > 0) {
-        const label = document.querySelector(".known-label");
         const progress = document.querySelector(".progress-content")
         if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
             if(hideBtn.checked) {
