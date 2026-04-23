@@ -328,21 +328,42 @@ function shuffleCards(array) {
             const j = Math.floor(Math.random() * (i));
             [array[i], array[j]] = [array[j], array[i]];
         }
-    
-        return array;
+
+        return array
     }
+
+    return array;
 }
 
 document.querySelector(".shuffle").addEventListener("click", function() {
-    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All mastered") {
-        localStorage.setItem("storedCards", JSON.stringify(shuffleCards(allCards)));
-        renderCards(allCards);
+    if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+        if(hideBtn.checked) {
+            let indexToFilter = []
+            const required = allCards.filter((card, index) => {
+                if(card.category !== "mastered") {
+                    indexToFilter.push(index);
+                    return card;
+                }
+            });
+            const shuffled = shuffleCards(required);
+            const newCards = allCards;
+            indexToFilter.forEach((index, i) => {
+                newCards[index] = shuffled[i];
+            });
+            localStorage.setItem("storedCards", JSON.stringify(newCards));
+            updateList();
+            updateSelected();
+            checkTitle();
+        } else {
+            localStorage.setItem("storedCards", JSON.stringify(shuffleCards(allCards)));
+            renderCards(allCards);
+            checkTitle();
+        }
     } else {
         const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
         let category = groups[data];
         category = shuffleCards(category);
         renderCards(category);
-        checkTitle();
     }
 })
  
@@ -353,6 +374,8 @@ document.querySelector(".reset").addEventListener("click", function() {
         currentCard = 0;
         updateList();
         checkLabel();
+        checkTitle();
+        localStorage.setItem("storedCards", JSON.stringify(allCards));
     } else {
         const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
         const category = groups[data];
@@ -365,6 +388,7 @@ document.querySelector(".reset").addEventListener("click", function() {
         currentCard = 0;
         updateList();
         checkLabel();
+        localStorage.setItem("storedCards", JSON.stringify(allCards));
     }
 });
 
@@ -440,7 +464,6 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
                 const index = allCards.indexOf(category[i]);
                 allCards.splice(index, 1);
                 category.splice(i, 1);
-                console.log(index);
                 localStorage.setItem("storedCards", JSON.stringify(allCards));
             };
 
@@ -561,7 +584,6 @@ function updateCategory() {
         }
     
         groups[categoryName].push(card);
-        console.log(groups)
     };
     
 }
