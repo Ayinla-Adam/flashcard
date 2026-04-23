@@ -221,11 +221,12 @@ masterBtn.addEventListener("click", function() {
             cards.forEach((card, index) => {
                 if(card.classList.contains("active")) {
                     const selected = allCards.filter((cards) => cards.Status !== "mastered");
-                    if(selected[index.known === 5]) {
+                    if(selected[index].known >= 5) {
+                        selected[index].known = 5;
                         selected[index].Status = "mastered";
                     } else {
                         selected[index].known += 1;
-                        if(selected[index.known === 5]) {
+                        if(selected[index].known === 5) {
                             selected[index].Status = "mastered";
                         }
                     }
