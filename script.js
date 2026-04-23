@@ -190,6 +190,7 @@ form.addEventListener("submit", function(e) {
     updateCategory();
     checkLabel();
     checkTitle();
+    renderKnown();
     alert("Flashcard successfully created");
     form.reset();
     // }
@@ -518,6 +519,7 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
             checkLabel();
         })
     }
+        renderKnown();
         closeDeleteModal();
     });
 
