@@ -42,6 +42,7 @@ function renderCards(items) {
     if(!cardsParent) return;
 
             cardsParent.innerHTML = items.map((item) => { 
+                if(!item.known) item.known = 0;
               return  `
                     <div class="flash-card">
                         <div class="flash-card-content">
@@ -70,7 +71,6 @@ function checkLabel() {
             label.textContent = `${(currentCard + 1)} of ${cards.length}`;
         });
         
-        progress.style.width = `${(currentCard + 1) / cards.length * 100}%`;
     } else {
         labels.forEach((label) => {
             label.textContent = `0 0f 0`;
@@ -94,7 +94,8 @@ function changeSlide(index) {
         currentCard = (index + cards.length) % cards.length;
         cards[currentCard].classList.add("active")
         checkLabel();
-        checkTitle()
+        checkTitle();
+        renderKnown();
     }
 
 };
@@ -151,6 +152,7 @@ form.addEventListener("submit", function(e) {
         Answer: answer,
         Status: "not-mastered",
         category: category,
+        known: 0,
     };
     
     allCards.push(collectedData);
@@ -219,14 +221,23 @@ masterBtn.addEventListener("click", function() {
             cards.forEach((card, index) => {
                 if(card.classList.contains("active")) {
                     const selected = allCards.filter((cards) => cards.Status !== "mastered");
-                    selected[index].Status = "mastered";
+                    if(selected[index.known === 5]) {
+                        selected[index].Status = "mastered";
+                    } else {
+                        selected[index].known += 1;
+                    }
+
                     localStorage.setItem("storedCards", JSON.stringify(allCards))
                 }
             })
         } else {
             cards.forEach((card, index) => {
                 if(card.classList.contains("active")) {
-                    allCards[index].Status = "mastered";
+                    if(allCards[index].known === 5) {
+                        allCards[index].Status = "mastered";
+                    } else {
+                        allCards[index].known += 1;
+                    }
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                 }
             })
@@ -244,8 +255,13 @@ masterBtn.addEventListener("click", function() {
                     const category = groups[data]
                     const required = category.filter(c => c.Status !== "mastered");
                     const index = allCards.indexOf(required[i]);
-                    required[i].Status = "mastered";
-                    allCards[index].Status = "mastered";
+                    if(required[i].known === 5) {
+                        required[i].Status = "mastered";
+                        allCards[index].Status = "mastered";
+                    } else {
+                        required[i].known += 1;
+                    }
+                    localStorage.setItem("storedCards", JSON.stringify(allCards));
                 }
             });
         } else {
@@ -254,8 +270,13 @@ masterBtn.addEventListener("click", function() {
                     const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
                     const category = groups[data]
                     const index = allCards.indexOf(category[i]);
-                    category[i].Status = "mastered";
-                    allCards[index].Status = "mastered";
+                    if(category[i].known === 5) {
+                        category[i].Status = "mastered";
+                        allCards[index].Status = "mastered";
+                    } else {
+                        category[i].known += 1;
+                    }
+                    localStorage.setItem("storedCards", JSON.stringify(allCards));
                 }
             })
         }
@@ -295,6 +316,7 @@ function updateSelected() {
         updateList();
         checkLabel();
         checkTitle();
+        renderKnown();
     } else {
         if(hideBtn.checked) {
             const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
@@ -369,7 +391,11 @@ document.querySelector(".shuffle").addEventListener("click", function() {
  
 document.querySelector(".reset").addEventListener("click", function() {
     if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
-        allCards.map((card) => card.Status = "not-mastered");
+        allCards.map((card) => {
+            card.Status = "not-mastered";
+            card.known = 0;
+        } );
+            
         renderCards(allCards);
         currentCard = 0;
         updateList();
@@ -382,14 +408,16 @@ document.querySelector(".reset").addEventListener("click", function() {
         category.filter((card, i) => {
             card.Status = "not-mastered";
             let index = allCards.indexOf(category[i]);
-            allCards[index].status = "not-mastered";
-        })
+            allCards[index].Status = "not-mastered";
+            allCards[index].known = 0;
+        });
         renderCards(category);
         currentCard = 0;
         updateList();
         checkLabel();
         localStorage.setItem("storedCards", JSON.stringify(allCards));
     }
+    renderKnown();
 });
 
 function openDeleteModal() {
@@ -659,6 +687,7 @@ function triggerCategory(card, index, activeIndex) {
         renderGroups();
         changeSlide(currentCard);
         updateSelected();
+        renderKnown()
     } else {
         let selectedCategory = groups[card.innerHTML];
         const involved = Object.keys(groups)
@@ -676,6 +705,7 @@ function triggerCategory(card, index, activeIndex) {
         checkLabel();
         renderGroups();
         updateSelected();
+        renderKnown();
     }
 }
 
@@ -775,3 +805,56 @@ function updateWidth() {
         container.style.width = `${maxWidth}px`;
     }
 }
+
+function renderKnown() {
+    if(cards.length > 0) {
+        const label = document.querySelector(".known-label");
+        const progress = document.querySelector(".progress-content")
+        if(document.querySelector(".content-control").innerHTML.slice(0, -1) === "All category") {
+            if(hideBtn.checked) {
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const filtered = allCards.filter((c) => c.Status !== "mastered");
+                        label.textContent = `${filtered[index].known} of 5`;
+                        progress.style.width = `${((filtered[index].known) / 5) * 100}%`;
+                    }
+                })
+            } else {
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        label.textContent = `${allCards[index].known} of 5`;
+                        progress.style.width = `${((allCards[index].known) / 5) * 100}%`;
+                    }
+                })
+            }
+            
+        } else {
+            if(hideBtn.checked) {
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                        const category = groups[data];
+                        const filtered = category.filter((c) => c.Status !== "mastered");
+                        label.textContent = `${filtered[index].known} of 5`;
+                        progress.style.width = `${((filtered[index].known) / 5) * 100}%`;
+                    }
+                })
+            } else {
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const data = document.querySelector(".content-control").innerHTML.slice(0, -1);
+                        const category = groups[data];
+                        label.textContent = `${(category[index].known)} of 5`
+                        progress.style.width = `${((category[index].known) / 5) * 100}%`;
+                    }
+                })
+            }
+        }
+       
+    } else {
+        label.textContent = "";
+        progress.style.width = "0%";
+    }
+}
+
+renderKnown();
