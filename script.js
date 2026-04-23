@@ -342,6 +342,7 @@ document.querySelector(".shuffle").addEventListener("click", function() {
         let category = groups[data];
         category = shuffleCards(category);
         renderCards(category);
+        checkTitle();
     }
 })
  

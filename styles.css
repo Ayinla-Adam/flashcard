@@ -87,7 +87,9 @@ main {
 .shuffle {
     background-color: transparent;
     border: 1px solid black;
-    padding: 1rem 2.5rem;
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
     border-radius: 20px;
 }
 
@@ -400,7 +402,7 @@ form {
     width: 100%;
     position: relative;
     left: -15px;
-    margin-bottom: 4rem;
+    margin-bottom: 4.8rem;
 }
 
 .menu-content {
@@ -424,14 +426,13 @@ form {
     border: none;
     border-radius: 6px;
     background-color: white;
-    box-shadow: 0 2px 6px RGBa(0, 0, 0, .12);
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .content-control {
     position: relative;
-    padding: 0.5rem 1rem;
+    padding: 1rem;
     font-weight: 700;
     font-size: 1.2rem;
     width: fit-content;
@@ -443,6 +444,7 @@ form {
 
 .single-category.shown {
     display: block !important;
+    box-shadow: 0 2px 12px RGBa(0, 0, 0, .5) !important;
 }
 
 .category-title {
