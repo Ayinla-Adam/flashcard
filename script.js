@@ -1,6 +1,8 @@
 'use strict';
 const prevBtn = document.querySelector(".prev-btn");
 const nextBtn = document.querySelector(".next-btn");
+let colors = ["blue", "purple", "#ffc0f2"];
+let colorCover = ["white", "white", "black"];
 let currentCard = 0;
 const cardsContainer = document.querySelector(".flash-card-container");
 let cardsContent = document.querySelectorAll(".flash-card-content");
@@ -97,9 +99,9 @@ function changeSlide(index) {
         checkLabel();
         checkTitle();
         renderKnown();
+        renderColors();
         setTimeout(updateContent, 10); 
     }
-
 };
 
 
@@ -155,6 +157,7 @@ form.addEventListener("submit", function(e) {
         Status: "not-mastered",
         category: category,
         known: 0,
+        color: colors[Math.floor(Math.random() * colors.length)],
     };
     
     allCards.push(collectedData);
@@ -194,6 +197,7 @@ form.addEventListener("submit", function(e) {
     checkTitle();
     renderKnown();
     renderAllCards();
+    renderColors();
     alert("Flashcard successfully created");
     form.reset();
     // }
@@ -677,6 +681,7 @@ function renderGroups() {
 
     updateWidth();
     checkTitle();
+    renderColors();
 }
 
 renderGroups();
@@ -709,7 +714,8 @@ function triggerCategory(card, index, activeIndex) {
         renderGroups();
         changeSlide(currentCard);
         updateSelected();
-        renderKnown()
+        renderKnown();
+        renderColors();
     } else {
         let selectedCategory = groups[card.innerHTML];
         const involved = Object.keys(groups)
@@ -727,6 +733,7 @@ function triggerCategory(card, index, activeIndex) {
         checkLabel();
         renderGroups();
         updateSelected();
+        renderColors();
         renderKnown();
     }
 }
@@ -892,7 +899,8 @@ document.querySelector(".btn-flex").addEventListener("click", function(e) {
         btn.classList.add("current");
     }
     renderMode();
-})
+    renderColors();
+});
 
 function renderMode() {
     const study = document.querySelector(".study");
@@ -1006,3 +1014,70 @@ function updateContent() {
     const flashCardsWrapper = document.querySelector(".flash-cards");
     if(flashCardsWrapper) flashCardsWrapper.style.height = finalHeight + "px";
 }
+
+function renderColors() {
+    allCards.map((card) => {if (!card.color) card.color = colors[Math.floor(Math.random() * colors.length)]});
+    localStorage.setItem("storedCard", JSON.stringify(allCards));
+    if(document.querySelector(".current").textContent === "Study Mode") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+            if(hideBtn.checked) {
+                const filtered = allCards.filter((c) => c.Status !== "mastered");
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const color = filtered[index].color;
+                        const followUp = colors.indexOf(color);
+                        document.querySelector(".flash-cards").style.color = colorCover[followUp];
+                        document.querySelector(".known-label").style.color = colorCover[followUp]
+                        cardsContainer.style.backgroundColor = `${color}`;
+                    }
+                });
+            } else {
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const color = allCards[index].color;
+                        const followUp = colors.indexOf(color);
+                        document.querySelector(".flash-cards").style.color = colorCover[followUp];
+                        document.querySelector(".known-label").style.color = colorCover[followUp]
+                        cardsContainer.style.backgroundColor = `${color}`;
+                    }
+                });
+            }
+        } else {
+            if(hideBtn.checked) {
+                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const category = groups[data];
+                const filtered = category.filter((c) => c.Status !== "mastered");
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const color = filtered[index].color;
+                        const followUp = colors.indexOf(color);
+                        document.querySelector(".flash-cards").style.color = colorCover[followUp];
+                        document.querySelector(".known-label").style.color = colorCover[followUp]
+                        cardsContainer.style.backgroundColor = `${color}`;
+                    }
+                })
+            } else {
+                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const category = groups[data];
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const color = category[index].color;
+                        const followUp = colors.indexOf(color);
+                        document.querySelector(".flash-cards").style.color = colorCover[followUp];
+                        document.querySelector(".known-label").style.color = colorCover[followUp]
+                        cardsContainer.style.backgroundColor = `${color}`;
+                    }
+                })
+            }
+        }
+    } else {
+        document.querySelectorAll(".all-card").forEach((card, index) => {
+            const color = allCards[index].color
+            const followUp = colors.indexOf(color);
+            card.style.backgroundColor = color;
+            card.style.color = colorCover[followUp];
+        })
+    }
+}
+
+renderColors();

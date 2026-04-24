@@ -542,7 +542,7 @@ form {
     flex-grow: 1;
     border-radius: 12px;
     padding: 1rem 0;
-    background-color: rgb(255, 192, 242) !important;
+    background-color: rgb(255, 192, 242);
     padding: 1rem;
     display: flex;
     flex-direction: column;
