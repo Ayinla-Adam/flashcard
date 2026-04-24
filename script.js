@@ -24,6 +24,7 @@ function updateList() {
         } else {
             cardsParent.innerHTML = `<h3 style="text-align: center;">Cards you add appear here</h3>`
         }
+    setTimeout(updateContent, 10); 
 }
 
 
@@ -96,6 +97,7 @@ function changeSlide(index) {
         checkLabel();
         checkTitle();
         renderKnown();
+        setTimeout(updateContent, 10); 
     }
 
 };
@@ -534,7 +536,7 @@ function closeModal() {
     document.querySelector(".edit-form").classList.add("hidden");
 }
 
-document.querySelector(".edit").addEventListener("click", openModal)
+document.querySelector(".edit").addEventListener("click", openModal);
 document.querySelector(".overlay").addEventListener("click", closeModal);
 
 document.querySelector("#new-question").addEventListener("focus", function() {
@@ -920,7 +922,10 @@ function renderAllCards() {
    document.querySelector(".all-container").innerHTML =  allCards.map((card) => { return `
                     <div class="all-card">
                         <div class="all-card-question">
-                            <h4>Question:</h4>
+                            <div class="info-flex">
+                                <h4>Question:</h4>
+                                <p class="all-category">${card.category}</p>
+                            </div>
                             <h3 class="all-question">${card.Question}</h3>
                         </div>
 
@@ -964,7 +969,6 @@ document.addEventListener("click", function(e) {
     // renderKnown();
     renderCards(allCards);
     renderAllCards();
-    reset();
 });
 
 function checkInner() {
@@ -975,3 +979,30 @@ function checkInner() {
 }
 
 checkInner();
+
+function updateContent() {
+    // 1. Corrected the selector with a dot (.)
+    const container = document.querySelector(".flash-card.active .flash-card-content");
+    if (!container) return;
+
+    // Reset heights of all contents first
+    document.querySelectorAll(".flash-card-content").forEach((c) => {
+        c.style.height = "";
+    });
+
+    let maxHeight = 0;
+
+    // 2. Measure the children (Question and Answer divs)
+    Array.from(container.children).forEach(item => {
+        // scrollHeight captures the full height of the text even if it overflows
+        maxHeight = Math.max(maxHeight, item.scrollHeight);
+    });
+
+    // 3. Apply the height (add a bit of padding/buffer if needed)
+    const finalHeight = maxHeight + 20; 
+    container.style.height = finalHeight + 'px';
+    
+    // Also ensure the main wrapper expands
+    const flashCardsWrapper = document.querySelector(".flash-cards");
+    if(flashCardsWrapper) flashCardsWrapper.style.height = finalHeight + "px";
+}

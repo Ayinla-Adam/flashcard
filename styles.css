@@ -29,9 +29,11 @@ main {
 
 
 .title {
+    padding: 0 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     padding-bottom: 2rem;
 }
 
@@ -123,19 +125,39 @@ main {
 
 .flash-cards {
     width: 100%;
+    height: fit-content;
     position: relative;
-    transform: translateY(-50%);
 }
 
 .flash-card {
     display: none;
-    height: 3rem;
+    width: 100%;
+    height: fit-content;
     background-color: transparent;
     perspective: 1000px; 
+    word-break: break-all;
+}
+
+.flash-cards {
+    width: 100%;
+    height: auto; /* Let JS handle the height */
+    position: relative; 
+    /* REMOVE THIS LINE: transform: translateY(-50%); */
+    
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Aligns to top so it grows downward */
+    transition: height 0.4s ease; /* Makes the expansion smooth */
+}
+
+/* Ensure the container doesn't try to center everything vertically */
+.flash-card-container {
+    justify-content: flex-start; /* Change from center to flex-start */
+    padding-top: 2rem; 
 }
 
 .flash-card.active {
-    display: block;
+    display: inline-block;
     animation: fadeIn 1s;
 }
 
@@ -285,7 +307,6 @@ main {
 .form-container {
     width: 100%;
     flex: 1;
-    min-width: 40.4rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -337,7 +358,7 @@ form {
     }
 }
 
-.hide-mastered {
+ .hide-mastered {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -347,7 +368,12 @@ form {
     background-color: RGBa(0, 0, 0, .5);
     width: 100%;
     height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     position: fixed;
+    z-index: 99;
 }
 
 .edit-form {
@@ -431,7 +457,7 @@ form {
     border-radius: 6px;
     min-width: fit-content;
     /* box-shadow: 0px 0px 20px 2px RGBa(0, 0, 0, .2); */
-    z-index: 100;
+    z-index: 50;
 }
 
 .single-category {
@@ -446,6 +472,12 @@ form {
     background-color: white;
     cursor: pointer;
     transition: all 0.2s;
+}
+
+.content {
+    width: 100%;
+    flex: 1;
+    min-width: 40.4rem;    
 }
 
 .content-control {
@@ -492,22 +524,22 @@ form {
     width: 100%;
     height: fit-content;
     padding: 1rem;
-    display: none;
-    gap: 3rem;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+    display: none
 }
 
 .all-container.shown {
     display: flex !important;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .all-card {
     flex: 1;
     width: 100%;
-    min-width: 20rem;
-    height: fit-content;
+    min-width: fit-content;
+    word-break: break-word;
+    flex-grow: 1;
     border-radius: 12px;
     padding: 1rem 0;
     background-color: rgb(255, 192, 242) !important;
@@ -515,13 +547,14 @@ form {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    justify-content: space-between;
 }
 
 .inline-flex {
     display: flex;
     align-items: center;
     gap: 1rem;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .inline-reset {
@@ -531,7 +564,7 @@ form {
 }
 
 .inline-progress {
-    width: 10rem;
+    width: 15rem;
     height: 1rem;
     border-radius: 10px;
     background-color: white;
@@ -545,7 +578,7 @@ form {
 }
 .inline-progress-flex {
     display: flex;
-    gap: 0.5rem;
+    gap: 2rem;
     align-items: center;
 }
 
@@ -560,4 +593,24 @@ form {
 
 .all-answer, .all-question {
     color: black;
+}
+
+.info-flex {
+    display: flex;
+    justify-content: space-between;
+    gap: 10rem;
+    word-break: keep-all;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.all-category {
+    font-size: 2rem;
+    word-break: keep-all !important;
+    color: white;
+    font-weight: 700;
+    border: 1px solid black;
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
 }
