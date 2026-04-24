@@ -340,6 +340,7 @@ function updateSelected() {
         checkLabel();
         checkTitle();
         renderKnown();
+        renderColors();
     } else {
         if(hideBtn.checked) {
             const data = document.querySelector(".content-control").textContent.slice(0, -1);
@@ -360,6 +361,7 @@ function updateSelected() {
         checkLabel();
         checkTitle();
         renderKnown();
+        renderColors();
     }
 
 }
