@@ -614,3 +614,7 @@ form {
     padding: 0.5rem 1rem;
     border-radius: 20px;
 }
+
+.all-card-answer h4 {
+    margin-bottom: 1rem;
+}
