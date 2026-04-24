@@ -191,6 +191,7 @@ form.addEventListener("submit", function(e) {
     checkLabel();
     checkTitle();
     renderKnown();
+    renderAllCards();
     alert("Flashcard successfully created");
     form.reset();
     // }
@@ -879,3 +880,98 @@ function renderKnown() {
 }
 
 renderKnown();
+
+document.querySelector(".btn-flex").addEventListener("click", function(e) {
+    if(e.target.classList.contains("btn-section")) {
+        const btn = e.target;
+        document.querySelectorAll(".btn-section").forEach((btn) => {
+            btn.classList.remove("current");
+        })
+        btn.classList.add("current");
+    }
+    renderMode();
+})
+
+function renderMode() {
+    const study = document.querySelector(".study");
+    const container = document.querySelector(".container");
+    const show = document.querySelector(".all-container");
+    const content = document.querySelector(".content");
+    if(document.querySelector(".current").textContent === "All Cards") {
+        study.classList.add("shown");
+        container.classList.remove("shown");
+        show.classList.add("shown");
+        content.classList.add("shown");
+        renderAllCards();
+    } else {
+        study.classList.remove("shown");
+        container.classList.add("shown");
+        show.classList.remove("shown");
+        content.classList.remove("shown");
+        renderCards(allCards);
+        updateCategory();
+        renderGroups();
+    }
+}
+
+renderMode();
+
+function renderAllCards() {
+   document.querySelector(".all-container").innerHTML =  allCards.map((card) => { return `
+                    <div class="all-card">
+                        <div class="all-card-question">
+                            <h4>Question:</h4>
+                            <h3 class="all-question">${card.Question}</h3>
+                        </div>
+
+                        <div class="all-card-answer">
+                            <h4>Answer:</h4>
+                            <h3 class="all-answer">${card.Answer}</h3>
+                        </div>
+
+                        <div class="inline-flex">
+                            <button class="inline-reset"><svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4" />
+                                </svg></button>
+                            <div class="inline-progress-flex">
+                                <div class="inline-progress">
+                                    <div class="inline-inner"></div>
+                                </div>
+                                <p class="all-label">${card.known}/5</p>
+                            </div>
+                        </div>
+
+                    </div>
+    `
+}).join("")
+
+checkInner();
+}
+renderAllCards();
+
+document.addEventListener("click", function(e) {
+    const reset = e.target.closest(".inline-reset");
+    if (!reset) return;
+    const all = Array.from(document.querySelectorAll(".inline-reset"));
+    const index = all.indexOf(reset);
+    allCards[index].status = "not-mastered";
+    allCards[index].known = 0;
+    localStorage.setItem("storedCards", JSON.stringify(allCards));
+    // renderKnown();
+    renderCards(allCards);
+    renderAllCards();
+    reset();
+});
+
+function checkInner() {
+    document.querySelectorAll(".inline-inner").forEach((inner, index) => {
+        const width = allCards[index].known / 5 * 100;
+        inner.style.width = `${width}%`
+    })
+}
+
+checkInner();

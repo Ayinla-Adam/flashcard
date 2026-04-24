@@ -10,28 +10,23 @@ html {
 }
 
 body {
-    /* margin-top: 5rem; */
     font-size: 1.6rem;
-    display: flex;
-    justify-content: center;
-    height: 100vh;
 }
 
 main {
     width: 100%;
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
-    flex-wrap: wrap;
 }
 
 .container {
     width: 100%;
-    flex: 1;
-    min-width: 40.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
 }
+
 
 .title {
     display: flex;
@@ -47,7 +42,9 @@ main {
 }
 
 .btn-flex {
-    border: 1px solid black;
+    display: flex;
+    border: 1px solid orange;
+    padding: 0.2rem;
     border-radius: 20px;
 }
 
@@ -66,6 +63,10 @@ main {
     width: 100%;
     border: 1px solid black;
     border-radius: 10px;
+}
+
+.study.shown {
+    display: none !important;
 }
 
 .study-flex {
@@ -273,9 +274,6 @@ main {
     border: 1px solid black;
     background-color: transparent;
     border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
 }
 
 .control-btns button  span {
@@ -292,7 +290,6 @@ main {
     flex-direction: column;
     gap: 2rem;
     justify-content: center;
-    width: fit-content;
     border: 1px solid black;
     border-radius: 12px;
     padding: 2rem;
@@ -487,4 +484,80 @@ form {
 
 .arrow.shown {
     transform: rotate(180deg);
+}
+
+.all-container {
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    height: fit-content;
+    padding: 1rem;
+    display: none;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.all-container.shown {
+    display: flex !important;
+}
+
+.all-card {
+    flex: 1;
+    width: 100%;
+    min-width: 20rem;
+    height: fit-content;
+    border-radius: 12px;
+    padding: 1rem 0;
+    background-color: rgb(255, 192, 242) !important;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.inline-flex {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.inline-reset {
+    background-color: white;
+    padding: 0.2rem 1rem;
+    border-radius: 10px;
+}
+
+.inline-progress {
+    width: 10rem;
+    height: 1rem;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    border: 1px solid black;
+}
+
+
+.inline-inner {
+    background-color: #F06292;
+}
+.inline-progress-flex {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.container.shown {
+    flex-wrap: wrap !important;
+    flex-direction: row !important;
+}
+
+.content.shown {
+    width: 100%;
+}
+
+.all-answer, .all-question {
+    color: black;
 }
