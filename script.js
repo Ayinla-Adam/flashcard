@@ -234,6 +234,7 @@ masterBtn.addEventListener("click", function() {
                         selected[index].Status = "mastered";
                     } else {
                         selected[index].known += 1;
+                        selected[index].status !="mastered";
                         if(selected[index].known === 5) {
                             selected[index].Status = "mastered";
                         }
@@ -249,6 +250,7 @@ masterBtn.addEventListener("click", function() {
                         allCards[index].Status = "mastered";
                     } else {
                         allCards[index].known += 1;
+                        allCards[index].Status = "not-mastered";
                         if(allCards[index].known === 5) {
                             allCards[index].Status = "mastered";
                         }
@@ -275,6 +277,7 @@ masterBtn.addEventListener("click", function() {
                         allCards[index].Status = "mastered";
                     } else {
                         required[i].known += 1;
+                        required[i].Status = "not-mastered";
                         if(required[i].known === 5) {
                             required[i].Status = "mastered";
                             allCards[index].Status = "mastered";
@@ -294,6 +297,7 @@ masterBtn.addEventListener("click", function() {
                         allCards[index].Status = "mastered";
                     } else {
                         category[i].known += 1;
+                        category[i].Status = "not-mastered";
                         if(category[i].known === 5) {
                             category[i].Status = "mastered";
                             allCards[index].Status = "mastered";
@@ -920,7 +924,14 @@ function renderMode() {
         container.classList.add("shown");
         show.classList.remove("shown");
         content.classList.remove("shown");
-        renderCards(allCards);
+        if(hideBtn.checked) {
+            const filtered = allCards.filter((card) => card.Status !== "mastered");
+            renderCards(filtered);
+        } else {
+            renderCards(allCards);
+        }
+        checkLabel();
+        renderKnown();
         updateCategory();
         renderGroups();
     }
@@ -973,7 +984,7 @@ document.addEventListener("click", function(e) {
     if (!reset) return;
     const all = Array.from(document.querySelectorAll(".inline-reset"));
     const index = all.indexOf(reset);
-    allCards[index].status = "not-mastered";
+    allCards[index].Status = "not-mastered";
     allCards[index].known = 0;
     localStorage.setItem("storedCards", JSON.stringify(allCards));
     renderCards(allCards);
