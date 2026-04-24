@@ -976,9 +976,9 @@ document.addEventListener("click", function(e) {
     allCards[index].status = "not-mastered";
     allCards[index].known = 0;
     localStorage.setItem("storedCards", JSON.stringify(allCards));
-    // renderKnown();
     renderCards(allCards);
     renderAllCards();
+    renderColors();    
 });
 
 function checkInner() {

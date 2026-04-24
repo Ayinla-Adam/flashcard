@@ -574,8 +574,11 @@ form {
 
 
 .inline-inner {
+    width: 0%;
     background-color: #F06292;
+    border-radius: inherit;
 }
+
 .inline-progress-flex {
     display: flex;
     gap: 2rem;
@@ -589,10 +592,6 @@ form {
 
 .content.shown {
     width: 100%;
-}
-
-.all-answer, .all-question {
-    color: black;
 }
 
 .info-flex {
