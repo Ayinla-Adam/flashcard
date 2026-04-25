@@ -217,7 +217,7 @@ main {
 .progress-content {
     transition: all 0.4s;
     border-radius: inherit;
-    width: 10%;
+    width: 0%;
     background-color: #F06292;
 }
 
@@ -279,8 +279,8 @@ main {
     background-color: transparent;
     border-radius: 20px;
     flex: 1;
-    min-width: fit-content;
     width: 100%;
+    min-width: fit-content;
 }
 
 .control-btns {
@@ -381,6 +381,7 @@ form {
     padding: 3rem;
     border-radius: 10px;
     background-color: pink;
+    width: 30rem;
     position: fixed;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -528,18 +529,14 @@ form {
 }
 
 .all-container.shown {
-    display: flex !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
     gap: 3rem;
-    justify-content: center;
-    flex-wrap: wrap;
 }
 
 .all-card {
-    flex: 1;
     width: 100%;
-    min-width: fit-content;
     word-break: break-word;
-    flex-grow: 1;
     border-radius: 12px;
     padding: 1rem 0;
     background-color: rgb(255, 192, 242);
@@ -552,19 +549,19 @@ form {
 
 .inline-flex {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 1rem;
     justify-content: space-between;
 }
 
-.inline-reset {
+.function-flex button {
     background-color: white;
     padding: 0.2rem 1rem;
     border-radius: 10px;
 }
 
 .inline-progress {
-    width: 15rem;
+    width: 100%;
     height: 1rem;
     border-radius: 10px;
     background-color: white;
@@ -572,6 +569,9 @@ form {
     border: 1px solid black;
 }
 
+.all-label {
+    word-break: keep-all;
+}
 
 .inline-inner {
     width: 0%;
@@ -604,16 +604,37 @@ form {
 }
 
 .all-category {
+    width: fit-content;
     font-size: 2rem;
-    word-break: keep-all !important;
-    color: white;
+    word-break: break-all !important;
     font-weight: 700;
     border: 1px solid black;
-    width: fit-content;
     padding: 0.5rem 1rem;
     border-radius: 20px;
 }
 
+.all-card-question h4 {
+    margin-bottom: 1rem;
+}
+
 .all-card-answer h4 {
     margin-bottom: 1rem;
+}
+
+@media(max-width: 1250px) {
+    .all-container.shown {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media(max-width: 970px) {
+    .all-container.shown {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 650px) {
+    .all-container.shown {
+        grid-template-columns: 1fr;
+    }
 }

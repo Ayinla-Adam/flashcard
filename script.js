@@ -1,4 +1,6 @@
 'use strict';
+let crossDelete;
+let crossEdit;
 const prevBtn = document.querySelector(".prev-btn");
 const nextBtn = document.querySelector(".next-btn");
 let colors = ["blue", "purple", "#ffc0f2"];
@@ -467,70 +469,82 @@ document.querySelector("#noBtn").addEventListener("click", closeDeleteModal);
 
 document.querySelector("#yesBtn").addEventListener("click", function(e) {
     e.preventDefault();
+    if(document.querySelector(".current").textContent === "Study Mode") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
     
-    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
-
-        if(hideBtn.checked) {
-            cards.forEach((card, index) => {
-                if(card.classList.contains("active")) {
-                    const selected = allCards.filter((card) => card.Status !== "mastered");
-                    let number = allCards.findIndex(n => n === selected[index]);
-                    if(number !== -1) {
-                        allCards.splice(number, 1);
-                        localStorage.setItem("storedCards", JSON.stringify(allCards));
+            if(hideBtn.checked) {
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        const selected = allCards.filter((card) => card.Status !== "mastered");
+                        let number = allCards.findIndex(n => n === selected[index]);
+                        if(number !== -1) {
+                            allCards.splice(number, 1);
+                            localStorage.setItem("storedCards", JSON.stringify(allCards));
+                        }
                     }
+                })
+    
+                const newSelected = allCards.filter((card) => card.Status !== "mastered");
+                renderCards(newSelected);
+                updateList();
+                checkLabel();
+                if(currentCard > 1) {
+                    currentCard -=1
+                } else {
+                    currentCard = 0;
                 }
-            })
-
-            const newSelected = allCards.filter((card) => card.Status !== "mastered");
-            renderCards(newSelected);
-            updateList();
-            checkLabel();
-            if(currentCard > 1) {
-                currentCard -=1
+                changeSlide(currentCard);
             } else {
-                currentCard = 0;
+                cards.forEach((card, index) => {
+                    if(card.classList.contains("active")) {
+                        allCards.splice(index, 1);
+                    }
+                })
+    
+                localStorage.setItem("storedCards", JSON.stringify(allCards))
+                renderCards(allCards);
+                updateList();
+                updateCategory();
+                renderGroups();
+                checkLabel();
+                if(currentCard > 1) {
+                    currentCard -=1
+                } else {
+                    currentCard = 0;
+                }
+                changeSlide(currentCard);
             }
-            changeSlide(currentCard);
+    
+            updateCategory();
+            
         } else {
-            cards.forEach((card, index) => {
+            cards.forEach((card, i) => {
                 if(card.classList.contains("active")) {
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                    const category = groups[data];
+                    const index = allCards.indexOf(category[i]);
                     allCards.splice(index, 1);
-                }
+                    category.splice(i, 1);
+                    localStorage.setItem("storedCards", JSON.stringify(allCards));
+                };
+    
+                renderCards(allCards)
+                updateCategory();
+                renderGroups();
+                checkLabel();
             })
-
-            localStorage.setItem("storedCards", JSON.stringify(allCards))
-            renderCards(allCards);
-            updateList();
-            updateCategory();
-            renderGroups();
-            checkLabel();
-            if(currentCard > 1) {
-                currentCard -=1
-            } else {
-                currentCard = 0;
-            }
-            changeSlide(currentCard);
         }
-
-        updateCategory();
-        
     } else {
-        cards.forEach((card, i) => {
-            if(card.classList.contains("active")) {
-                const data = document.querySelector(".content-control").textContent.slice(0, -1);
-                const category = groups[data];
-                const index = allCards.indexOf(category[i]);
-                allCards.splice(index, 1);
-                category.splice(i, 1);
-                localStorage.setItem("storedCards", JSON.stringify(allCards));
-            };
-
-            renderCards(allCards)
-            updateCategory();
-            renderGroups();
-            checkLabel();
-        })
+        const all = Array.from(document.querySelectorAll(".inline-delete"));
+        if (!crossDelete) {
+            return
+        }
+        const index = all.indexOf(crossDelete);
+        allCards.splice(index, 1);;
+        localStorage.setItem("storedCards", JSON.stringify(allCards));
+        renderCards(allCards);
+        renderAllCards();
+        renderColors();
     }
         renderKnown();
         closeDeleteModal();
@@ -557,12 +571,17 @@ document.querySelector("#new-answer").addEventListener("focus", function() {
     document.querySelectorAll(".new-form-error").forEach((error) => error.textContent = "");
 });
 
+document.querySelector("#new-category").addEventListener("focus", function(e) {
+    document.querySelectorAll(".new-form-error").forEach((error) => error.textContent = "");
+})
 
 document.querySelector(".edit-form").addEventListener("submit", function(e) {
     e.preventDefault();
     const newQuestion = document.getElementById("new-question").value;
     const newAnswer = document.getElementById("new-answer").value;
-        if(newQuestion.trim() === "") {
+    const newCategory = document.getElementById("new-category").value;
+    
+    if(newQuestion.trim() === "") {
         document.querySelector("#new-question-error").textContent = "A question is required";
         return false;
     }
@@ -572,59 +591,105 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
         return false;
     }
 
-    if(cards.length > 0) {
-        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+    if(newCategory.trim() === "") {
+        document.querySelector("#new-category-error").textContent = "A category is required";
+        return false;
+    } 
 
-            if(hideBtn.checked) {
-                const selected = allCards.filter((card) => card.Status !== "mastered");
-                cards.forEach((card,index) => {
-                    if(card.classList.contains("active")) {
-                        selected[index].Question = newQuestion;
-                        selected[index].Answer = newAnswer;
+    if(cards.length > 0) {
+        if(document.querySelector(".current").textContent === "Study Mode") {
+            
+            if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+    
+                if(hideBtn.checked) {
+                    const selected = allCards.filter((card) => card.Status !== "mastered");
+                    cards.forEach((card,index) => {
+                        if(card.classList.contains("active")) {
+                            selected[index].Question = newQuestion;
+                            selected[index].Answer = newAnswer;
+                            selected[index].category = newCategory;
+                        }
+                    });
+                    localStorage.setItem("storedCards", JSON.stringify(allCards));
+                    renderCards(selected);
+                    updateList();
+                    checkLabel();
+                    if(currentCard > 1) {
+                        currentCard -=1
+                    } else {
+                        currentCard = 0;
                     }
-                });
-                localStorage.setItem("storedCards", JSON.stringify(allCards));
-                renderCards(selected);
-                updateList();
-                checkLabel();
-                if(currentCard > 1) {
-                    currentCard -=1
+                    changeSlide(currentCard);
                 } else {
-                    currentCard = 0;
+                    cards.forEach((card, index) => {
+                        if(card.classList.contains("active")) {
+                            allCards[index].Question = newQuestion;
+                            allCards[index].Answer = newAnswer;
+                            allCards[index].category = newCategory;
+                        }
+                    })
+                    localStorage.setItem("storedCards", JSON.stringify(allCards));
+                    renderCards(allCards);
+                    updateList();
+                    checkLabel();
                 }
-                changeSlide(currentCard);
             } else {
-                cards.forEach((card, index) => {
-                    if(card.classList.contains("active")) {
-                        allCards[index].Question = newQuestion;
-                        allCards[index].Answer = newAnswer;
-                    }
-                })
-                localStorage.setItem("storedCards", JSON.stringify(allCards));
-                renderCards(allCards);
-                updateList();
-                checkLabel();
-            }
-        } else {
-            cards.forEach((card, i) => {
-                if(card.classList.contains("active")) {
+                if(hideBtn.checked) {
                     const data = document.querySelector(".content-control").textContent.slice(0, -1);
                     const category = groups[data];
-                    const index = allCards.indexOf(category[i]);
-                    allCards[index].Question = newQuestion;
-                    allCards[index].Answer = newAnswer;
-                    category[i].Question = newQuestion;
-                    category[i].Answer = newAnswer;
-                }
-            })
+                    const filtered = category.filter((c) => c.Status !== "mastered");
+                    cards.forEach((card, i) => {
+                         const index = allCards.indexOf(filtered[i]);
+                         if(card.classList.contains("active")) {
+                            allCards[index].Question = newQuestion;
+                            allCards[index].Answer = newAnswer;
+                            filtered[i].Question = newQuestion;
+                            filtered[i].Answer = newAnswer;
+                            filtered[i].category = newCategory;
+                        }
+                    })
 
+                    localStorage.setItem("storedCards", JSON.stringify(allCards));
+                    const selected = allCards.filter((card) => card.Status !== "mastered");
+                    renderCards(selected);
+                    updateCategory();
+                    renderGroups();
+                    updateList();
+                    checkLabel();
+                } else {
+                    cards.forEach((card, i) => {
+                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                        const category = groups[data];
+                        if(card.classList.contains("active")) {
+                            const index = allCards.indexOf(category[i]);
+                            allCards[index].Question = newQuestion;
+                            allCards[index].Answer = newAnswer;
+                            category[i].Question = newQuestion;
+                            category[i].Answer = newAnswer;
+                            category[i].category = newCategory;
+                        }
+                    })
+                    localStorage.setItem("storedCards", JSON.stringify(allCards));
+                    renderCards(allCards);
+                    updateCategory();
+                    renderGroups();
+                    updateList();
+                    checkLabel();
+                } 
+            }
+        } else {
+            const all = Array.from(document.querySelectorAll(".inline-edit"));
+            if(!crossEdit) {
+                return;
+            }
+            const index = all.indexOf(crossEdit);
+            allCards[index].Question = newQuestion;
+            allCards[index].Answer = newAnswer;
+            allCards[index].category = newCategory;
             localStorage.setItem("storedCards", JSON.stringify(allCards));
             renderCards(allCards);
-            updateCategory();
-            renderGroups();
-            updateList();
-            checkLabel();
-
+            renderAllCards();
+            renderColors(); 
         }
     }
     document.querySelector(".edit-form").reset();
@@ -942,32 +1007,54 @@ renderMode();
 function renderAllCards() {
    document.querySelector(".all-container").innerHTML =  allCards.map((card) => { return `
                     <div class="all-card">
+                        <p class="all-category">${card.category}</p>
+                        
                         <div class="all-card-question">
-                            <div class="info-flex">
-                                <h4>Question:</h4>
-                                <p class="all-category">${card.category}</p>
-                            </div>
+                            <h4>Question:</h4>
                             <h3 class="all-question">${card.Question}</h3>
                         </div>
-
+                            
                         <div class="all-card-answer">
                             <h4>Answer:</h4>
                             <h3 class="all-answer">${card.Answer}</h3>
                         </div>
-
+                            
                         <div class="inline-flex">
-                            <button class="inline-reset"><svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4" />
-                                </svg></button>
                             <div class="inline-progress-flex">
                                 <div class="inline-progress">
                                     <div class="inline-inner"></div>
                                 </div>
                                 <p class="all-label">${card.known}/5</p>
+                            </div>
+
+                            <div class="function-flex">
+                                    <button class="inline-reset"><svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4" />
+                                    </svg></button>
+
+                                    <button class="inline-delete">
+                                        <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                            viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                        </svg>
+                                    </button>
+
+                                    <button class="inline-edit">
+                                        <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                            viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                        </svg>
+                                    </button>
                             </div>
                         </div>
 
@@ -991,6 +1078,20 @@ document.addEventListener("click", function(e) {
     renderAllCards();
     renderColors();    
 });
+
+document.addEventListener("click", function(e){
+    const cancel = e.target.closest(".inline-delete");
+    if (!cancel) return;
+    crossDelete = cancel;
+    openDeleteModal();
+});
+
+document.addEventListener("click", function(e) {
+    const edit = e.target.closest(".inline-edit");
+    if (!edit) return;
+    crossEdit = edit;
+    openModal();
+})
 
 function checkInner() {
     document.querySelectorAll(".inline-inner").forEach((inner, index) => {
