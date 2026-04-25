@@ -1120,6 +1120,7 @@ function renderMode() {
             content.classList.add("shown");
             renderAllCards();
         } else {
+            currentCard = 0;
             study.classList.remove("shown");
             container.classList.add("shown");
             show.classList.remove("shown");
@@ -1139,6 +1140,7 @@ function renderMode() {
                 renderKnown();
             }
         }
+        checkLabel();
     }
 }
 

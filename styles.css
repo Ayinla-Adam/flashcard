@@ -136,7 +136,7 @@ main {
     height: fit-content;
     background-color: transparent;
     perspective: 1000px; 
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .flash-cards {
@@ -531,7 +531,7 @@ form {
 
 .all-container.shown {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
     gap: 3rem;
 }
 
@@ -620,22 +620,4 @@ form {
 
 .all-card-answer h4 {
     margin-bottom: 1rem;
-}
-
-@media(max-width: 1250px) {
-    .all-container.shown {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media(max-width: 970px) {
-    .all-container.shown {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media(max-width: 650px) {
-    .all-container.shown {
-        grid-template-columns: 1fr;
-    }
 }
