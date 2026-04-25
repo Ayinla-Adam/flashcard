@@ -443,31 +443,70 @@ document.querySelector(".shuffle").addEventListener("click", function() {
  
 document.querySelector(".reset").addEventListener("click", function() {
     if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
-        allCards.map((card) => {
-            card.Status = "not-mastered";
-            card.known = 0;
-        } );
+        // allCards.map((card) => {
+            // card.Status = "not-mastered";
+            // card.known = 0;
+        // } )
+        if(hideBtn.checked) {
+            const filtered = allCards.filter((card) => card.Status !== "mastered");
+            cards.forEach((card, i) => {
+                if(card.classList.contains("active")) {
+                    filtered[i].Status = "not-mastered";
+                    const index = allCards.indexOf(filtered[i]);
+                    filtered[i].known = 0;
+                    allCards[index].Status = "not-mastered";
+                    allCards[index].known = 0;
+                }
+            })
             
-        renderCards(allCards);
-        currentCard = 0;
-        updateList();
-        checkLabel();
-        checkTitle();
-        localStorage.setItem("storedCards", JSON.stringify(allCards));
+            renderCards(allCards);
+            renderKnown();
+            localStorage.setItem("storedCards", JSON.stringify(allCards));
+        } else {
+            cards.forEach((card, index) => {
+                if(card.classList.contains("active")) {
+                    allCards[index].Status = "not-mastered";
+                    allCards[index].known = 0;
+                }
+            })
+            
+            renderCards(allCards);
+            renderKnown();
+            localStorage.setItem("storedCards", JSON.stringify(allCards));
+        }
     } else {
-        const data = document.querySelector(".content-control").textContent.slice(0, -1);
-        const category = groups[data];
-        category.filter((card, i) => {
-            card.Status = "not-mastered";
-            let index = allCards.indexOf(category[i]);
-            allCards[index].Status = "not-mastered";
-            allCards[index].known = 0;
-        });
-        renderCards(category);
-        currentCard = 0;
-        updateList();
-        checkLabel();
-        localStorage.setItem("storedCards", JSON.stringify(allCards));
+        if(hideBtn.checked) {
+            const data = document.querySelector(".content-control").textContent.slice(0, -1);
+            const category = groups[data];
+            const filtered = category.filter((card, i) => card.Status = "not-mastered");
+            
+            cards.forEach((card, i) => {
+                if(card.classList.contains("active")) {
+                    filtered[i].Status = "not-mastered";
+                    const index = allCards.indexOf(filtered[i]);
+                    filtered[i].known = 0;
+                    allCards[index].Status = "not-mastered";
+                    allCards[index].known = 0;
+                }
+            })
+            renderCards(filtered);
+            localStorage.setItem("storedCards", JSON.stringify(allCards));
+        } else {
+            const data = document.querySelector(".content-control").textContent.slice(0, -1);
+            const category = groups[data];
+            cards.forEach((card, i) => {
+                if(card.classList.contains("active")) {
+                    category[i].Status = "not-mastered";
+                    category[i].known = 0;
+                    const index = allCards.indexOf(category[i]);
+                    allCards[index].Status = "not-mastered";
+                    allCards[index].known = 0;
+                }
+            })
+            renderCards(category);
+            renderKnown();
+            localStorage.setItem("storedCards", JSON.stringify(allCards));
+        }
     }
     renderKnown();
 });
