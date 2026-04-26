@@ -1066,7 +1066,7 @@ function renderKnown() {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
                         if(allCards[index].known === 5) {
-                            label.textContent = `mastered ${allCards[index].known}/5`
+                            label.textContent = `Mastered ${allCards[index].known}/5`
                             label.classList.add("master-label");
                             progressContainer.style.display = "none";
                         } else {
@@ -1098,7 +1098,7 @@ function renderKnown() {
                         const data = document.querySelector(".content-control").textContent.slice(0, -1);
                         const category = groups[data];
                         if(category[index].known === 5) {
-                            label.textContent = `mastered ${category[index].known}/5`;
+                            label.textContent = `Mastered ${category[index].known}/5`;
                             label.classList.add("master-label");
                             progressContainer.style.display = "none";
                         } else {
