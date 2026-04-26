@@ -26,8 +26,17 @@ function updateList() {
         cardsContent.forEach((content) => content.classList.remove("rotate"));
         if(cards.length > 0) {
             cards[(currentCard + cards.length) % cards.length].classList.add("active");
+            cardsContainer.style.border = "none";
         } else {
-            cardsParent.innerHTML = `<h3 style="text-align: center;">Cards you add appear here</h3>`
+            cardsParent.innerHTML = `
+            <div style="line-height: 2;">
+                <h2 style="text-align: center; font-family: serif; color: black;">No cards to study</h2>
+                <h4 style="text-align: center; color: #626262; font-weight: 400; line-height: 1.5;">Adjust your filters or create a new card to get started</h4>
+            </div>
+            `
+            cardsContainer.style.backgroundColor = "#f9e4c8";
+            cardsContainer.style.border = "1.5px dashed grey";
+            cardsContainer.style.height = "266px";
         }
     setTimeout(updateContent, 10); 
 }
@@ -221,7 +230,6 @@ form.addEventListener("submit", function(e) {
     renderColors();
     alert("Flashcard successfully created");
     form.reset();
-    // }
 })
 
 prevBtn.addEventListener("click", function() {
@@ -1205,6 +1213,24 @@ function renderAllCards() {
 }).join("")
 
 checkInner();
+if(document.querySelectorAll(".all-card").length < 1) {
+        const container = document.querySelector(".all-container");
+        container.style.height = "266px";
+        container.style.backgroundColor = "#f9e4c8";
+        container.style.border = "1.5px dashed grey";
+        container.innerHTML = `
+        <div style="line-height: 2;">
+        <h2 style="text-align: center; font-family: serif; color: black;">No cards to view</h2>
+        <h4 style="text-align: center; color: #626262; font-weight: 400; line-height: 1.5;">Adjust your filters or create a new card to get started</h4>
+        </div>
+        `
+        container.style.alignItems = "center";
+    } else {
+        const container = document.querySelector(".all-container");
+            container.style.height = "fit-content";
+            container.style.border = "1px solid black";
+            container.style.backgroundColor = "transparent";
+    }
 }
 renderAllCards();
 
@@ -1337,3 +1363,9 @@ function renderColors() {
 }
 
 renderColors();
+
+document.addEventListener("click", function(e) {
+    if(!e.target.classList.contains("content-control")) {
+        closeCategory();
+    }
+});
