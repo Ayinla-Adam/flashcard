@@ -507,6 +507,10 @@ form {
     padding: 0.5rem 1rem;
     border-radius: 20px;
     background-color: white;
+    width: 30rem;
+    max-width: fit-content;
+    scrollbar-width: none;
+    overflow-x: auto;
 }
 
 .arrow {
@@ -605,9 +609,12 @@ form {
 }
 
 .all-category {
-    width: fit-content;
+    width: 100%;
+    max-width: fit-content;
+    scrollbar-width: none;
+    overflow-x: auto;
     font-size: 2rem;
-    word-break: break-all !important;
+    word-break: keep-all;
     font-weight: 700;
     border: 1px solid black;
     padding: 0.5rem 1rem;
