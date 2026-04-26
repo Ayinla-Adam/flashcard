@@ -1467,7 +1467,7 @@ document.addEventListener("click", function(e) {
             const item = document.querySelectorAll(".function-flex");
             const list = Array.from(document.querySelectorAll(".icon"));
             const index = list.indexOf(icon);
-            item[index].classList.add("shown");
+            item[index].classList.toggle("shown");
         } else {
             document.querySelectorAll(".function-flex").forEach(item => item.classList.remove("shown"));
         }

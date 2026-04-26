@@ -535,13 +535,12 @@ form {
 
 .all-container.shown {
     display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
     gap: 3rem;
 }
 
 .all-card {
     width: 100%;
-    max-width: 50rem;
     word-break: break-word;
     border-radius: 12px;
     padding: 1rem 0 0 0;
@@ -560,6 +559,8 @@ form {
 
 .function-flex {
     position: absolute;
+    right: 0.1%;
+    margin-top: 1rem;   
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -688,6 +689,7 @@ form {
 }
 
 .icon {
+    width: 3rem;
     font-size: 2rem;
     font-weight: 700;
 }
