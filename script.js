@@ -38,7 +38,7 @@ function updateList() {
             cardsContainer.style.border = "1.5px dashed grey";
             cardsContainer.style.height = "266px";
         }
-    setTimeout(updateContent, 10); 
+        setTimeout(updateContent, 10); 
 }
 
 
@@ -1113,8 +1113,11 @@ function renderKnown() {
         }
        
     } else {
+        const progressContainer = document.querySelector(".progress-bar");
         label.textContent = "";
         progress.style.width = "0%";
+        label.classList.remove("master-label");
+        progressContainer.style.display = "none";
     }
 }
 
@@ -1462,7 +1465,6 @@ document.addEventListener("click", function(e) {
 
 document.addEventListener("click", function(e) {
         const icon = e.target.closest(".icon");
-        console.log(icon);
         if(icon) {
             const item = document.querySelectorAll(".function-flex");
             const list = Array.from(document.querySelectorAll(".icon"));
