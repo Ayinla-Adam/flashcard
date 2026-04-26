@@ -1049,7 +1049,8 @@ function updateWidth() {
 function renderKnown() {
     const label = document.querySelector(".known-label");
     if(cards.length > 0) {
-        const progress = document.querySelector(".progress-content")
+        const progress = document.querySelector(".progress-content");
+        const progressContainer = document.querySelector(".progress-bar");
         if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
             if(hideBtn.checked) {
                 cards.forEach((card, index) => {
@@ -1057,13 +1058,23 @@ function renderKnown() {
                         const filtered = allCards.filter((c) => c.Status !== "mastered");
                         label.textContent = `${filtered[index].known}/5`;
                         progress.style.width = `${((filtered[index].known) / 5) * 100}%`;
+                        label.classList.remove("master-label");
+                        progressContainer.style.display = "flex";
                     }
                 })
             } else {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
-                        label.textContent = `${allCards[index].known}/5`;
-                        progress.style.width = `${((allCards[index].known) / 5) * 100}%`;
+                        if(allCards[index].known === 5) {
+                            label.textContent = `mastered ${allCards[index].known}/5`
+                            label.classList.add("master-label");
+                            progressContainer.style.display = "none";
+                        } else {
+                            label.textContent = `${allCards[index].known}/5`;
+                            label.classList.remove("master-label");
+                            progressContainer.style.display = "flex";
+                            progress.style.width = `${((allCards[index].known) / 5) * 100}%`;
+                        }
                     }
                 })
             }
@@ -1075,6 +1086,8 @@ function renderKnown() {
                         const data = document.querySelector(".content-control").textContent.slice(0, -1);
                         const category = groups[data];
                         const filtered = category.filter((c) => c.Status !== "mastered");
+                        label.classList.remove("master-label");
+                        progressContainer.style.display = "flex";
                         label.textContent = `${filtered[index].known}/5`;
                         progress.style.width = `${((filtered[index].known) / 5) * 100}%`;
                     }
@@ -1084,8 +1097,16 @@ function renderKnown() {
                     if(card.classList.contains("active")) {
                         const data = document.querySelector(".content-control").textContent.slice(0, -1);
                         const category = groups[data];
-                        label.textContent = `${(category[index].known)}/5`
-                        progress.style.width = `${((category[index].known) / 5) * 100}%`;
+                        if(category[index].known === 5) {
+                            label.textContent = `mastered ${category[index].known}/5`;
+                            label.classList.add("master-label");
+                            progressContainer.style.display = "none";
+                        } else {
+                            label.textContent = `${(category[index].known)}/5`
+                            progress.style.width = `${((category[index].known) / 5) * 100}%`;
+                            label.classList.remove("master-label");
+                            progressContainer.style.display = "flex";
+                        }
                     }
                 })
             }
@@ -1155,12 +1176,13 @@ function renderMode() {
 renderMode();
 
 function renderAllCards() {
-   document.querySelector(".all-container").innerHTML =  allCards.map((card) => { return `
+   document.querySelector(".all-container").innerHTML =  allCards.map((card) => { 
+    if(card.known === 5 && card.Status === "mastered") {
+        return `
                     <div class="all-card">
-                        <p class="all-category">${card.category}</p>
-                        
-                        <div class="all-card-question">
-                            <h4>Question:</h4>
+                    
+                    <div class="all-card-question">
+                    <h4>Question:</h4>
                             <h3 class="all-question">${card.Question}</h3>
                         </div>
                             
@@ -1168,8 +1190,70 @@ function renderAllCards() {
                             <h4>Answer:</h4>
                             <h3 class="all-answer">${card.Answer}</h3>
                         </div>
+                        <div class="option-flex">
+                            <div class="border-category">
+                                <p class="all-category">${card.category}</p>
+                            </div>
+
+                            <div class="master-label-container">
+                                <button class="master-label">Mastered ${card.known}/5</button>
+                            </div>
+                            <div class="hover-container">
+                                <p class="icon">&vellip;</p>
                             
-                        <div class="inline-flex">
+                                <div class="function-flex">
+                                <button class="inline-reset"><svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                                d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4" />
+                                        </svg></button>
+    
+                                        <button class="inline-delete">
+                                        <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"
+                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                            </svg>
+                                        </button>
+    
+                                        <button class="inline-edit">
+                                        <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                                viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                                </svg>
+                                                </button>
+                                                </div>
+                            </div>
+                                            </div>
+                    </div>
+                    
+                    `
+    } else {
+        
+        return `
+                    <div class="all-card">
+                    
+                    <div class="all-card-question">
+                    <h4>Question:</h4>
+                    <h3 class="all-question">${card.Question}</h3>
+                        </div>
+                            
+                        <div class="all-card-answer">
+                        <h4>Answer:</h4>
+                            <h3 class="all-answer">${card.Answer}</h3>
+                        </div>
+   
+                        <div class="option-flex">
+                            <div class="border-category">
+                                <p class="all-category">${card.category}</p>
+                            </div>
                             <div class="inline-progress-flex">
                                 <div class="inline-progress">
                                     <div class="inline-inner"></div>
@@ -1177,39 +1261,44 @@ function renderAllCards() {
                                 <p class="all-label">${card.known}/5</p>
                             </div>
 
-                            <div class="function-flex">
-                                    <button class="inline-reset"><svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
-                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        fill="none" viewBox="0 0 24 24">
+                            <div class="hover-container">
+                                <p class="icon">&vellip;</p>
+                            
+                                <div class="function-flex">
+                                <button class="inline-reset"><svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                                d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4" />
+                                        </svg></button>
+    
+                                        <button class="inline-delete">
+                                        <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
+                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4" />
-                                    </svg></button>
-
-                                    <button class="inline-delete">
+                                        stroke-width="2"
+                                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                            </svg>
+                                        </button>
+    
+                                        <button class="inline-edit">
                                         <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                            viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                        </svg>
-                                    </button>
-
-                                    <button class="inline-edit">
-                                        <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white"
-                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                            viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                        </svg>
-                                    </button>
+                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                                viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                                </svg>
+                                                </button>
+                                                </div>
                             </div>
                         </div>
 
                     </div>
     `
+    }
 }).join("")
 
 checkInner();
@@ -1263,7 +1352,8 @@ document.addEventListener("click", function(e) {
 
 function checkInner() {
     document.querySelectorAll(".inline-inner").forEach((inner, index) => {
-        const width = allCards[index].known / 5 * 100;
+        const filtered = allCards.filter(card => card.Status !== "mastered");
+        const width = filtered[index].known / 5 * 100;
         inner.style.width = `${width}%`
     })
 }
@@ -1369,3 +1459,16 @@ document.addEventListener("click", function(e) {
         closeCategory();
     }
 });
+
+document.addEventListener("click", function(e) {
+        const icon = e.target.closest(".icon");
+        console.log(icon);
+        if(icon) {
+            const item = document.querySelectorAll(".function-flex");
+            const list = Array.from(document.querySelectorAll(".icon"));
+            const index = list.indexOf(icon);
+            item[index].classList.add("shown");
+        } else {
+            document.querySelectorAll(".function-flex").forEach(item => item.classList.remove("shown"));
+        }
+})
