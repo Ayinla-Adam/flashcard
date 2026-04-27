@@ -67,7 +67,7 @@ main {
     border-radius: 10px;
 }
 
-.study.shown {
+.flash-card-container.shown {
     display: none !important;
 }
 
@@ -289,6 +289,14 @@ main {
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
+}
+
+.flash-flex.shown {
+    display: none;
+}
+
+.control-btns.shown {
+    display: none;
 }
 
 .control-btns button {
@@ -665,7 +673,8 @@ form {
     padding: 0 1rem;
     outline: none;
     border: none;
-    background-color: #07f69a;
+    background-color: #01e68e;
+    color: black !important;
     padding: 1rem;
     border-radius: 20px;
 }

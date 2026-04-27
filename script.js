@@ -27,9 +27,11 @@ function updateList() {
         if(cards.length > 0) {
             cards[(currentCard + cards.length) % cards.length].classList.add("active");
             cardsContainer.style.border = "none";
+            cardsContainer.style.justifyContent = "flex-start";
+            document.querySelector(".category-title").style.display = "block";
         } else {
             cardsParent.innerHTML = `
-            <div style="line-height: 2;">
+            <div class="message" style="line-height: 2;">
                 <h2 style="text-align: center; font-family: serif; color: black;">No cards to study</h2>
                 <h4 style="text-align: center; color: #626262; font-weight: 400; line-height: 1.5;">Adjust your filters or create a new card to get started</h4>
             </div>
@@ -37,6 +39,8 @@ function updateList() {
             cardsContainer.style.backgroundColor = "#f9e4c8";
             cardsContainer.style.border = "1.5px dashed grey";
             cardsContainer.style.height = "266px";
+            document.querySelector(".category-title").style.display = "none";
+            cardsContainer.style.justifyContent = "center";
         }
         setTimeout(updateContent, 10); 
 }
@@ -215,18 +219,20 @@ form.addEventListener("submit", function(e) {
         if(hideBtn.checked) {
             const selected = allCards.filter((card) => card.Status !== "mastered");
             renderCards(selected);
+            renderAllCards(selected);
         } else {
             renderCards(allCards);
+            renderAllCards(allCards);
         }
     } else {
         renderCards(groups[Object.keys(groups)[0]]);
+        renderAllCards(groups[Object.keys(groups)[0]]);
     }
     updateList();
     updateCategory();
     checkLabel();
     checkTitle();
     renderKnown();
-    renderAllCards();
     renderColors();
     alert("Flashcard successfully created");
     form.reset();
@@ -344,57 +350,109 @@ masterBtn.addEventListener("click", function() {
 })
 
 function updateSelected() {
-    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
-        if(hideBtn.checked) {
-            // cards.forEach((flashcard, index) => {
-                //         if(!flashcard.classList.contains("mastered")) {
-                    //             console.log(index);
-                    //             shown.push(allCards[index]);
-            //         }
-            //     });        
-            
-            currentCard = 0;
-            let shown = allCards.filter((card) => {
-                return card.Status !== "mastered";
-            })
-            // cards.forEach((card, index) => {
-                //     if(card.classList.contains("mastered")) {
+    if(document.querySelector(".current").textContent === "Study Mode") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+            if(hideBtn.checked) {
+                // cards.forEach((flashcard, index) => {
+                    //         if(!flashcard.classList.contains("mastered")) {
+                        //             console.log(index);
+                        //             shown.push(allCards[index]);
+                //         }
+                //     });        
                 
-                //     }
-            
-                // })
+                currentCard = 0;
+                let shown = allCards.filter((card) => {
+                    return card.Status !== "mastered";
+                })
+                // cards.forEach((card, index) => {
+                    //     if(card.classList.contains("mastered")) {
+                    
+                    //     }
                 
-                renderCards(shown);
-        } else {
-            renderCards(allCards);
-        }
-        
-        updateList();
-        checkLabel();
-        checkTitle();
-        renderKnown();
-        renderColors();
-    } else {
-        if(hideBtn.checked) {
-            const data = document.querySelector(".content-control").textContent.slice(0, -1);
-            const category = groups[data];
-            currentCard = 0;
-            let shown = category.filter((card) => {
-                return card.Status !== "mastered";
-            });
-
-            renderCards(shown);
+                    // })
+                    
+                    renderCards(shown);
+            } else {
+                renderCards(allCards);
+            }
+            
+            updateList();
+            checkLabel();
+            checkTitle();
             renderKnown();
+            renderColors();
         } else {
-            const data = document.querySelector(".content-control").textContent.slice(0, -1);
-            const category = groups[data];
-            renderCards(category);
+            if(hideBtn.checked) {
+                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const category = groups[data];
+                currentCard = 0;
+                let shown = category.filter((card) => {
+                    return card.Status !== "mastered";
+                });
+    
+                renderCards(shown);
+                renderKnown();
+            } else {
+                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const category = groups[data];
+                renderCards(category);
+            }
+            updateList();
+            checkLabel();
+            checkTitle();
+            renderKnown();
+            renderColors();
         }
-        updateList();
-        checkLabel();
-        checkTitle();
-        renderKnown();
-        renderColors();
+    } else {
+        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+            if(hideBtn.checked) {
+                // cards.forEach((flashcard, index) => {
+                    //         if(!flashcard.classList.contains("mastered")) {
+                        //             console.log(index);
+                        //             shown.push(allCards[index]);
+                //         }
+                //     });        
+                
+                let shown = allCards.filter((card) => card.Status !== "mastered");
+                // cards.forEach((card, index) => {
+                    //     if(card.classList.contains("mastered")) {
+                    
+                    //     }
+                
+                    // })
+                    
+                    renderAllCards(shown);
+            } else {
+                    renderAllCards(allCards);
+            }
+            
+            // updateList();
+            // checkLabel();
+            // checkTitle();
+            // renderKnown();
+            renderColors();
+        } else {
+            if(hideBtn.checked) {
+                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const category = groups[data];
+                currentCard = 0;
+                let shown = category.filter((card) => {
+                    return card.Status !== "mastered";
+                });
+    
+                renderAllCards(shown);
+                renderKnown();
+            } else {
+                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const category = groups[data];
+                renderAllCards(category);
+            }
+            updateList();
+            checkLabel();
+            checkTitle();
+            renderKnown();
+            renderColors();
+        }
     }
 
 }
@@ -440,12 +498,15 @@ document.querySelector(".shuffle").addEventListener("click", function() {
             localStorage.setItem("storedCards", JSON.stringify(shuffleCards(allCards)));
             renderCards(allCards);
             checkTitle();
+            renderAllCards(allCards);
         }
     } else {
         const data = document.querySelector(".content-control").textContent.slice(0, -1);
         let category = groups[data];
         category = shuffleCards(category);
         renderCards(category);
+        renderAllCards(category);
+        renderColors();
     }
 })
  
@@ -609,7 +670,7 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
         allCards.splice(index, 1);;
         localStorage.setItem("storedCards", JSON.stringify(allCards));
         renderCards(allCards);
-        renderAllCards();
+        renderAllCards(allCards);
         renderColors();
     }
         renderKnown();
@@ -732,7 +793,7 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
     } 
 
     if(cards.length > 0) {
-        if(document.querySelector(".current").textContent === "Study Mode") {
+        // if(document.querySelector(".current").textContent === "Study Mode") {
             
             if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
     
@@ -747,6 +808,7 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                     });
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     renderCards(selected);
+                    renderAllCards(selected);
                     updateList();
                     checkLabel();
                     if(currentCard > 1) {
@@ -765,6 +827,7 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                     })
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     renderCards(allCards);
+                    renderAllCards(allCards);
                     updateList();
                     checkLabel();
                 }
@@ -788,6 +851,7 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     const selected = allCards.filter((card) => card.Status !== "mastered");
                     renderCards(selected);
+                    renderAllCards(selected);
                     updateCategory();
                     renderGroups();
                     updateList();
@@ -808,26 +872,27 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                     })
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     renderCards(allCards);
+                    renderAllCards(allCards);
                     updateCategory();
                     renderGroups();
                     updateList();
                     checkLabel();
                 } 
             }
-        } else {
-            const all = Array.from(document.querySelectorAll(".inline-edit"));
-            if(!crossEdit) {
-                return;
-            }
-            const index = all.indexOf(crossEdit);
-            allCards[index].Question = newQuestion;
-            allCards[index].Answer = newAnswer;
-            allCards[index].category = newCategory;
-            localStorage.setItem("storedCards", JSON.stringify(allCards));
-            renderCards(allCards);
-            renderAllCards();
-            renderColors(); 
-        }
+        // } else {
+        //     const all = Array.from(document.querySelectorAll(".inline-edit"));
+        //     if(!crossEdit) {
+        //         return;
+        //     }
+        //     const index = all.indexOf(crossEdit);
+        //     allCards[index].Question = newQuestion;
+        //     allCards[index].Answer = newAnswer;
+        //     allCards[index].category = newCategory;
+        //     localStorage.setItem("storedCards", JSON.stringify(allCards));
+        //     renderCards(allCards);
+        //     renderAllCards();
+        //     renderColors(); 
+        // }
     }
     document.querySelector(".edit-form").reset();
     closeModal();
@@ -890,7 +955,7 @@ function renderGroups() {
 
     updateWidth();
     checkTitle();
-    renderColors();
+    // renderColors();
 }
 
 renderGroups();
@@ -900,50 +965,81 @@ if (e.target.classList.contains("single-category") && !e.target.classList.contai
     const allCategories = Array.from(document.querySelectorAll(".single-category"));
     const clickedIndex = allCategories.indexOf(e.target)
     const activeIndex = allCategories.findIndex((category) => category.classList.contains("content-control"));
-    triggerCategory(e.target, clickedIndex, activeIndex)
+    currentCard = 0;
+    updateList();
+    triggerCategory(e.target, clickedIndex, activeIndex);
 }})
 
 function triggerCategory(card, index, activeIndex) {
-    if(hideBtn.checked) {
-         let selectedCategory = groups[card.innerHTML];
-        const involved = Object.keys(groups)
-        let categoryName = involved[index];
-        [involved[activeIndex], involved[index]] = [involved[index], involved[activeIndex]];
-        let newGroups = {};
-        for (let keys of involved) {
-            newGroups[keys] = groups[keys];
+    if(document.querySelector(".current").textContent === "Study Mode") {
+
+        if(hideBtn.checked) {
+            let selectedCategory = groups[card.innerHTML];
+            const involved = Object.keys(groups)
+            let categoryName = involved[index];
+            [involved[activeIndex], involved[index]] = [involved[index], involved[activeIndex]];
+            let newGroups = {};
+            for (let keys of involved) {
+                newGroups[keys] = groups[keys];
+            }
+        
+            groups = newGroups;
+            const data = groups[involved[0]]
+            const required = data.filter(((card) => card.Status !== "mastered"));
+            renderCards(required);
+            updateList();
+            checkLabel();
+            renderGroups();
+            changeSlide(currentCard);
+            updateSelected();
+            renderKnown();
+        } else {
+            let selectedCategory = groups[card.innerHTML];
+            const involved = Object.keys(groups)
+            let categoryName = involved[index];
+            [involved[activeIndex], involved[index]] = [involved[index], involved[activeIndex]];
+            let newGroups = {};
+            for (let keys of involved) {
+                newGroups[keys] = groups[keys];
+            }
+            groups = newGroups;
+            renderGroups();
+            renderCards(groups[involved[0]]);
+            updateList();
+            checkLabel();
+            changeSlide(currentCard);
+            renderKnown();
+            // updateSelected();
         }
-    
-        groups = newGroups;
-        const data = groups[involved[0]]
-        const required = data.filter(((card) => card.Status !== "mastered"));
-        renderCards(required);
-        updateList();
-        checkLabel();
-        renderGroups();
-        changeSlide(currentCard);
-        updateSelected();
-        renderKnown();
-        renderColors();
     } else {
-        let selectedCategory = groups[card.innerHTML];
-        const involved = Object.keys(groups)
-        let categoryName = involved[index];
-        [involved[activeIndex], involved[index]] = [involved[index], involved[activeIndex]];
-        let newGroups = {};
-        for (let keys of involved) {
-            newGroups[keys] = groups[keys];
+        if(hideBtn.checked) {
+            let selectedCategory = groups[card.innerHTML];
+            const involved = Object.keys(groups)
+            let categoryName = involved[index];
+            [involved[activeIndex], involved[index]] = [involved[index], involved[activeIndex]];
+            let newGroups = {};
+            for (let keys of involved) {
+                newGroups[keys] = groups[keys];
+            }
+        
+            groups = newGroups;
+            const data = groups[involved[0]]
+            const required = data.filter(((card) => card.Status !== "mastered"));
+            renderAllCards(required);
+        } else {
+            let selectedCategory = groups[card.innerHTML];
+            const involved = Object.keys(groups)
+            let categoryName = involved[index];
+            [involved[activeIndex], involved[index]] = [involved[index], involved[activeIndex]];
+            let newGroups = {};
+            for (let keys of involved) {
+                newGroups[keys] = groups[keys];
+            }
+            groups = newGroups;
+            renderGroups();
+            console.log(Object.keys(groups)[0]);
+            renderAllCards(groups[Object.keys(groups)[0]]);
         }
-    
-        groups = newGroups;
-        renderCards(groups[involved[0]]);
-        updateList();
-        changeSlide(currentCard);
-        checkLabel();
-        renderGroups();
-        updateSelected();
-        renderColors();
-        renderKnown();
     }
 }
 
@@ -1138,10 +1234,12 @@ document.querySelector(".btn-flex").addEventListener("click", function(e) {
 });
 
 function renderMode() {
-    const study = document.querySelector(".study");
+    const study = document.querySelector(".flash-card-container");
     const container = document.querySelector(".container");
     const show = document.querySelector(".all-container");
     const content = document.querySelector(".content");
+    const option = document.querySelector(".flash-flex") 
+    const controls = document.querySelector(".control-btns");
     if(previous === document.querySelector(".current").textContent) {
         return;
     } else {
@@ -1150,13 +1248,29 @@ function renderMode() {
             container.classList.remove("shown");
             show.classList.add("shown");
             content.classList.add("shown");
-            renderAllCards();
+            option.classList.add("shown");
+            controls.classList.add("shown");
+            if(hideBtn.checked) {
+                updateCategory();
+                renderGroups();
+                renderKnown();
+                const filtered = allCards.filter((card) => card.Status !== "mastered");
+                renderAllCards(filtered);
+                return;
+            } else {
+                updateCategory();
+                renderGroups();
+                renderKnown();
+                renderAllCards(allCards);
+            }
         } else {
             currentCard = 0;
             study.classList.remove("shown");
             container.classList.add("shown");
             show.classList.remove("shown");
             content.classList.remove("shown");
+            option.classList.remove("shown");
+            controls.classList.remove("shown");
             if(hideBtn.checked) {
                 const filtered = allCards.filter((card) => card.Status !== "mastered");
                 renderCards(filtered);
@@ -1178,8 +1292,8 @@ function renderMode() {
 
 renderMode();
 
-function renderAllCards() {
-   document.querySelector(".all-container").innerHTML =  allCards.map((card) => { 
+function renderAllCards(items) {
+   document.querySelector(".all-container").innerHTML =  items.map((card) => { 
     if(card.known === 5 && card.Status === "mastered") {
         return `
                     <div class="all-card">
@@ -1305,6 +1419,7 @@ function renderAllCards() {
 }).join("")
 
 checkInner();
+renderColors();  
 if(document.querySelectorAll(".all-card").length < 1) {
         const container = document.querySelector(".all-container");
         container.style.height = "266px";
@@ -1324,7 +1439,7 @@ if(document.querySelectorAll(".all-card").length < 1) {
             container.style.backgroundColor = "transparent";
     }
 }
-renderAllCards();
+renderAllCards(allCards);
 
 document.addEventListener("click", function(e) {
     const reset = e.target.closest(".inline-reset");
@@ -1335,7 +1450,7 @@ document.addEventListener("click", function(e) {
     allCards[index].known = 0;
     localStorage.setItem("storedCards", JSON.stringify(allCards));
     renderCards(allCards);
-    renderAllCards();
+    renderAllCards(allCards);
     renderColors();    
 });
 
@@ -1446,15 +1561,48 @@ function renderColors() {
             }
         }
     } else {
-        document.querySelectorAll(".all-card").forEach((card, index) => {
-            const color = allCards[index].color
-            const followUp = colors.indexOf(color);
-            card.style.backgroundColor = color;
-            card.style.color = colorCover[followUp];
-        })
+        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+            if(hideBtn.checked) {
+                const filtered = allCards.filter((c) => c.Status !== "mastered");
+                document.querySelectorAll(".all-card").forEach((card, index) => {
+                    const color = filtered[index].color
+                    const followUp = colors.indexOf(color);
+                    card.style.backgroundColor = color;
+                    card.style.color = colorCover[followUp];
+                })
+            } else {
+                document.querySelectorAll(".all-card").forEach((card, index) => {
+                    const color = allCards[index].color;
+                    const followUp = colors.indexOf(color);
+                    card.style.backgroundColor = color;
+                    card.style.color = colorCover[followUp];
+                })
+            }
+        } else {
+            if(hideBtn.checked) {
+                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const category = groups[data];
+                const filtered = category.filter((c) => c.Status !== "mastered");
+                document.querySelectorAll(".all-card").forEach((card, index) => {
+                    const color = filtered[index].color;
+                    const followUp = colors.indexOf(color);
+                    card.style.backgroundColor = color;
+                    card.style.color = colorCover[followUp];
+                })
+            } else {
+                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                console.log(data);
+                const category = groups[data];
+                document.querySelectorAll(".all-card").forEach((card, index) => {
+                    const color = category[index].color
+                    const followUp = colors.indexOf(color);
+                    card.style.backgroundColor = color;
+                    card.style.color = colorCover[followUp];
+                })
+            }
+        }
     }
 }
-
 renderColors();
 
 document.addEventListener("click", function(e) {
