@@ -1162,7 +1162,12 @@ function renderKnown() {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
                         if(allCards[index].known === 5) {
-                            label.textContent = `Mastered ${allCards[index].known}/5`
+                            label.innerHTML = `<svg xmlns="http://w3.org" viewBox="0 0 24 24" width="20" height="20">
+  <!-- Solid Green Background -->
+  <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+  <!-- White Inner Tick -->
+  <polyline points="8 12 11 15 16 9" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>Mastered ${allCards[index].known}/5`
                             label.classList.add("master-label");
                             progressContainer.style.display = "none";
                         } else {
@@ -1194,7 +1199,12 @@ function renderKnown() {
                         const data = document.querySelector(".content-control").textContent.slice(0, -1);
                         const category = groups[data];
                         if(category[index].known === 5) {
-                            label.textContent = `Mastered ${category[index].known}/5`;
+                            label.innerHTML = `<svg xmlns="http://w3.org" viewBox="0 0 24 24" width="20" height="20">
+  <!-- Solid Green Background -->
+  <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+  <!-- White Inner Tick -->
+  <polyline points="8 12 11 15 16 9" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>Mastered ${category[index].known}/5`;
                             label.classList.add("master-label");
                             progressContainer.style.display = "none";
                         } else {
@@ -1313,7 +1323,12 @@ function renderAllCards(items) {
                             </div>
 
                             <div class="master-label-container">
-                                <button class="master-label">Mastered ${card.known}/5</button>
+                                <button class="master-label"><svg xmlns="http://w3.org" viewBox="0 0 24 24" width="20" height="20">
+  <!-- Solid Green Background -->
+  <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+  <!-- White Inner Tick -->
+  <polyline points="8 12 11 15 16 9" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>  Mastered ${card.known}/5</button>
                             </div>
                             <div class="hover-container">
                                 <p class="icon">&vellip;</p>

@@ -677,6 +677,9 @@ form {
     color: black !important;
     padding: 1rem;
     border-radius: 20px;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
 }
 
 .option-flex > .border-category, .option-flex .master-label-container, .option-flex > .inline-progress-flex{
