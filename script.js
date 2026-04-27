@@ -219,21 +219,21 @@ form.addEventListener("submit", function(e) {
         if(hideBtn.checked) {
             const selected = allCards.filter((card) => card.Status !== "mastered");
             renderCards(selected);
+            renderColors();
             renderAllCards(selected);
         } else {
             renderCards(allCards);
+            renderColors();
             renderAllCards(allCards);
         }
-    } else {
-        renderCards(groups[Object.keys(groups)[0]]);
-        renderAllCards(groups[Object.keys(groups)[0]]);
     }
+
     updateList();
+    updateSelected();
     updateCategory();
     checkLabel();
     checkTitle();
     renderKnown();
-    renderColors();
     alert("Flashcard successfully created");
     form.reset();
 })
@@ -372,15 +372,16 @@ function updateSelected() {
                     // })
                     
                     renderCards(shown);
+                    renderColors();
             } else {
                 renderCards(allCards);
+                renderColors();
             }
             
             updateList();
             checkLabel();
             checkTitle();
             renderKnown();
-            renderColors();
         } else {
             if(hideBtn.checked) {
                 const data = document.querySelector(".content-control").textContent.slice(0, -1);
@@ -401,7 +402,6 @@ function updateSelected() {
             checkLabel();
             checkTitle();
             renderKnown();
-            renderColors();
         }
     } else {
         if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
@@ -430,7 +430,6 @@ function updateSelected() {
             // checkLabel();
             // checkTitle();
             // renderKnown();
-            renderColors();
         } else {
             if(hideBtn.checked) {
                 const data = document.querySelector(".content-control").textContent.slice(0, -1);
@@ -451,7 +450,6 @@ function updateSelected() {
             checkLabel();
             checkTitle();
             renderKnown();
-            renderColors();
         }
     }
 
@@ -666,12 +664,25 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
         if (!crossDelete) {
             return
         }
-        const index = all.indexOf(crossDelete);
-        allCards.splice(index, 1);;
-        localStorage.setItem("storedCards", JSON.stringify(allCards));
-        renderCards(allCards);
-        renderAllCards(allCards);
-        renderColors();
+
+        if(hideBtn.checked) {
+            const filtered = allCards.filter((c) => c.Status !== "mastered");
+            const i = all.indexOf(crossDelete);
+            const index = allCards.indexOf(filtered[i])
+            allCards.splice(index, 1);
+            filtered.splice(i, 1);
+            localStorage.setItem("storedCards", JSON.stringify(allCards));
+            renderCards(filtered);
+            renderAllCards(filtered);
+            renderColors();
+        } else {
+            const index = all.indexOf(crossDelete);
+            allCards.splice(index, 1);;
+            localStorage.setItem("storedCards", JSON.stringify(allCards));
+            renderCards(allCards);
+            renderAllCards(allCards);
+            renderColors();
+        }   
     }
         renderKnown();
         closeDeleteModal();
@@ -736,11 +747,18 @@ function openModal() {
             if(!crossEdit) {
                 return;
             };
-
-            const index = all.indexOf(crossEdit);
-            newQuestion = allCards[index].Question;
-            newAnswer = allCards[index].Answer;
-            newCategory = allCards[index].category;
+            if(hideBtn.checked) {
+                const index = all.indexOf(crossEdit);
+                const filtered = allCards.filter((card) => card.Status !== "mastered");
+                newQuestion = filtered[index].Question;
+                newAnswer = filtered[index].Answer;
+                newCategory = filtered[index].category;
+            } else {
+                const index = all.indexOf(crossEdit);
+                newQuestion = allCards[index].Question;
+                newAnswer = allCards[index].Answer;
+                newCategory = allCards[index].category;
+            }
         }
     }
 
@@ -894,6 +912,8 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
         //     renderColors(); 
         // }
     }
+    updateCategory();
+    renderGroups();
     document.querySelector(".edit-form").reset();
     closeModal();
 });
@@ -953,8 +973,10 @@ function renderGroups() {
     
     closeCategory();
 
-    updateWidth();
-    checkTitle();
+    if(document.querySelector(".current").textContent === "Study Mode") {
+        updateWidth();
+        checkTitle();
+    }
     // renderColors();
 }
 
@@ -1024,6 +1046,7 @@ function triggerCategory(card, index, activeIndex) {
         
             groups = newGroups;
             const data = groups[involved[0]]
+            renderGroups();
             const required = data.filter(((card) => card.Status !== "mastered"));
             renderAllCards(required);
         } else {
@@ -1434,7 +1457,7 @@ function renderAllCards(items) {
 }).join("")
 
 checkInner();
-renderColors();  
+renderColors();
 if(document.querySelectorAll(".all-card").length < 1) {
         const container = document.querySelector(".all-container");
         container.style.height = "266px";
@@ -1461,12 +1484,22 @@ document.addEventListener("click", function(e) {
     if (!reset) return;
     const all = Array.from(document.querySelectorAll(".inline-reset"));
     const index = all.indexOf(reset);
-    allCards[index].Status = "not-mastered";
-    allCards[index].known = 0;
-    localStorage.setItem("storedCards", JSON.stringify(allCards));
-    renderCards(allCards);
-    renderAllCards(allCards);
-    renderColors();    
+    if(hideBtn.checked) {
+        const filtered = allCards.filter((c) => c.Status !== "mastered");
+        filtered[index].Status = "not-mastered";
+        filtered[index].known = 0;
+        localStorage.setItem("storedCards", JSON.stringify(allCards));
+        renderCards(filtered);
+        renderColors();
+        renderAllCards(filtered);
+    } else {
+        allCards[index].Status = "not-mastered";
+        allCards[index].known = 0;
+        localStorage.setItem("storedCards", JSON.stringify(allCards));
+        renderCards(allCards);
+        renderColors();    
+        renderAllCards(allCards);
+    }
 });
 
 document.addEventListener("click", function(e){
