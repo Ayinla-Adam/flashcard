@@ -542,7 +542,7 @@ form {
 
 .all-container.shown {
     display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
     gap: 3rem;
 }
 
@@ -627,10 +627,10 @@ form {
 
 .all-category {
     width: 100%;
-    max-width: fit-content;
+    max-width: 15rem;
     scrollbar-width: none;
     overflow-x: auto;
-    font-size: 2rem;
+    font-size: 1.5rem;
     word-break: keep-all;
     font-weight: 700;
     border: 1px solid black;
@@ -685,6 +685,11 @@ form {
     border-right: 1px solid black;
     padding-right: 1rem;
     height: 100%;
+}
+
+.border-category {
+    display: flex;
+    align-items: center;
 }
     
 .master-label-container {
