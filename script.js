@@ -13,7 +13,7 @@ let cards = document.querySelectorAll(".flash-card");
 const labels = document.querySelectorAll(".number");
 const progress = document.querySelector(".progress-content");
 const addBtn = document.querySelector(".add-btn");
-const form = document.querySelector("form");
+const form = document.querySelector(".add-form");
 const inputs = document.querySelectorAll("input");
 const cardsParent = document.querySelector(".flash-cards");
 
@@ -234,6 +234,7 @@ form.addEventListener("submit", function(e) {
     checkLabel();
     checkTitle();
     renderKnown();
+    renderStats();
     alert("Flashcard successfully created");
     form.reset();
 })
@@ -347,6 +348,7 @@ masterBtn.addEventListener("click", function() {
         changeSlide(currentCard);
     }
 
+    renderStats();
 })
 
 function updateSelected() {
@@ -576,6 +578,7 @@ document.querySelector(".reset").addEventListener("click", function() {
         }
     }
     renderKnown();
+    renderStats();
 });
 
 function openDeleteModal() {
@@ -685,6 +688,7 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
         }   
     }
         renderKnown();
+        renderStats();
         closeDeleteModal();
     });
 
@@ -1500,6 +1504,7 @@ document.addEventListener("click", function(e) {
         renderColors();    
         renderAllCards(allCards);
     }
+    renderStats();
 });
 
 document.addEventListener("click", function(e){
@@ -1670,3 +1675,63 @@ document.addEventListener("click", function(e) {
             document.querySelectorAll(".function-flex").forEach(item => item.classList.remove("shown"));
         }
 })
+
+function renderStats() {
+    const total = document.querySelector(".total");
+    const notStarted = document.querySelector(".not-started");
+    const finished = document.querySelector(".mastered");
+    const inProgress = document.querySelector(".in-progress");
+    let totalPlaceholder = 0;
+    let notStartedPlaceholder = 0;
+    let finishedPlaceholder = 0;
+    let inProgressPlaceholder = 0;
+
+    if(!total || !notStarted || !finished || !inProgress) return;
+    
+    allCards.map((card) => {
+        totalPlaceholder += 1;
+        if(card.known === 5) {
+            finishedPlaceholder += 1;
+        }
+
+        if(card.known === 0) {
+            notStartedPlaceholder += 1;
+        }
+
+        if(card.known > 0 && card.known !== 5) {
+            inProgressPlaceholder += 1;
+        }
+    })
+
+    total.textContent = totalPlaceholder;
+    notStarted.textContent = notStartedPlaceholder;
+    inProgress.textContent = inProgressPlaceholder;
+    finished.textContent = finishedPlaceholder;
+}
+
+renderStats();
+
+document.querySelector(".toggle-flex").addEventListener("click", function(e) {
+    if(e.target.classList.contains("toggle-btn")) {
+        const btn = e.target;
+        document.querySelectorAll(".toggle-btn").forEach((btn) => {
+            btn.classList.remove("current");
+        })
+        btn.classList.add("current");
+    }
+
+    renderView();
+});
+
+function renderView() {
+    const container = document.querySelector(".study-statistics");
+    if(document.querySelector(".toggle-btn.current").textContent === "View Statistics") {
+        container.classList.add("shown");
+        form.classList.remove("shown");
+    } else {
+        container.classList.remove("shown");
+        form.classList.add("shown");
+    }
+}
+
+renderView();

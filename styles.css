@@ -43,22 +43,31 @@ main {
     align-items: center;
 }
 
-.btn-flex {
+.btn-flex, .toggle-flex {
     display: flex;
     border: 1px solid orange;
     padding: 0.2rem;
     border-radius: 20px;
+    width: fit-content;
 }
 
-.btn-section {
+.btn-section, .toggle-btn {
     border: none;
     padding: 1rem;
     background-color: transparent;
     border-radius: inherit;
 }
 
-.btn-section.current {
+.btn-section.current, .toggle-btn.current {
     background-color: rgba(255, 200, 3, 0.833);
+}
+
+.add-form {
+    display: none;
+}
+
+.add-form.shown {
+    display: flex;
 }
 
 .study {
@@ -709,4 +718,59 @@ form {
     width: 3rem;
     font-size: 2rem;
     font-weight: 700;
+}
+
+.study-statistics {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    display: none;
+}
+
+.statistic {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    border: 1px solid black;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.study-statistics .statistic:nth-of-type(1) .stats-icon {
+    background-color: #721fad;
+}
+
+.study-statistics .statistic:nth-of-type(2) .stats-icon {
+    background-color: #07c787;
+}
+
+.study-statistics .statistic:nth-of-type(3) .stats-icon {
+    background-color: #f94264
+}
+
+.study-statistics .statistic:nth-of-type(4) .stats-icon {
+    background-color: #F06292;
+}
+
+.stats-icon {
+    height: 100%;
+    padding: 5rem;
+    width: 8rem;
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+
+.text-title {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    justify-content: space-between;
+}
+
+.text-title h1 {
+    font-size: 4rem;
+}
+
+.study-statistics.shown {
+    display: flex;
 }

@@ -13,7 +13,8 @@
     <main>
         <div class="title">
             <div class="logo-wrapper">
-                <img src="./DESIGNS/image.png" width="50" height="50" alt="logo" />
+                <img src="./pngtree-yellow-lightning-bolt-clipart-png-image_16520276.png" width="50" height="50"
+                    alt="logo" />
                 <h2>Flashcard</h2>
             </div>
 
@@ -119,9 +120,12 @@
             </div>
 
             <div class="form-container">
-                <h2>Add a card</h2>
+                <div class="toggle-flex">
+                    <button class="toggle-btn">Add a card</button>
+                    <button class="toggle-btn current">View Statistics</button>
+                </div>
 
-                <form>
+                <form class="add-form">
                     <div class="form-group">
                         <label for="question">Question:</label>
                         <input type="text" id="question" placeholder="Enter your question" />
@@ -143,8 +147,48 @@
                     <button type="submit" class="add-btn">ADD</button>
                 </form>
 
-            </div>
-        </div>
+                <div class="study-statistics shown">
+                    <h3>Study Statistics</h3>
+                    <div class="statistic">
+                        <div class="text-title">
+                            <h4>Total Cards</h4>
+                            <h1 class="total">40</h1>
+                        </div>
+
+                        <div class="stats-icon"></div>
+
+                    </div>
+
+                    <div class="statistic">
+                        <div class="text-title">
+                            <h4>Mastered</h4>
+                            <h1 class="mastered">40</h1>
+                        </div>
+
+                        <div class="stats-icon"></div>
+
+                    </div>
+
+                    <div class="statistic">
+                        <div class="text-title">
+                            <h4>In Progress</h4>
+                            <h1 class="in-progress">40</h1>
+                        </div>
+
+                        <div class="stats-icon"></div>
+
+                    </div>
+
+                    <div class="statistic">
+                        <div class="text-title">
+                            <h4>Not Started</h4>
+                            <h1 class="not-started">40</h1>
+                        </div>
+
+                        <div class="stats-icon"></div>
+
+                    </div>
+                </div>
     </main>
 
     <form class="edit-form hidden">
