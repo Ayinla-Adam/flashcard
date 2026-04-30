@@ -1,7 +1,7 @@
 {
     "name": "Flashcard Study App",
     "short_name": "Flashcard App",
-    "start_url": "/",
+    "start_url": "/flashcard/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",
