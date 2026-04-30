@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flash card</title>
     <link rel="stylesheet" href="./styles.css" />
-    <link rel="manifest" href="flashcard/manifest.json" />
+    <link rel="manifest" href="./manifest.json" />
     <script defer src="script.js"></script>
 </head>
 
@@ -233,7 +233,7 @@
 
     <script type="text/javascript">
         if('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/flashcard/service-worker.js')
+            navigator.serviceWorker.register('./service-worker.js')
             .then(() => console.log("Service worker registered"))
             .catch((err) => console.log("Service worker failed", err));
         }
