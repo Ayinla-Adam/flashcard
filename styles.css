@@ -31,9 +31,10 @@ main {
 .title {
     padding: 0 1rem;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    gap: 1rem;
     padding-bottom: 2rem;
 }
 
@@ -331,6 +332,7 @@ main {
     border: 1px solid black;
     border-radius: 12px;
     padding: 2rem;
+    min-width: 40.4rem;
 }
 
 form {
@@ -773,4 +775,19 @@ form {
 
 .study-statistics.shown {
     display: flex;
+}
+
+.action-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.action-flex button{
+    background: #F06292;
+    border: none;
+    font-size: 18px;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 2.5rem;
 }

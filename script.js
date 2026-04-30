@@ -1735,3 +1735,55 @@ function renderView() {
 }
 
 renderView();
+
+function exportCards() {
+    const cardsToExport = JSON.parse(localStorage.getItem("storedCards"));
+    const dataStr = JSON.stringify(cardsToExport, null, 2);
+
+    // Create file
+    const blob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+
+    // Trigger a download
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `flashcards-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+document.querySelector(".export-btn").addEventListener("click", exportCards);
+
+function importCards(event) {
+    const file = event.target.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedCards = JSON.parse(e.target.result);
+            console.log(importedCards);
+            console.log(typeof importedCards)
+            console.log(Array.isArray(importedCards));
+            if(!Array.isArray(importedCards)) {
+                alert("Invalid file: must be an array of cards");
+                return;
+            }
+
+            localStorage.setItem("storedCards", JSON.stringify(importedCards));
+            location.reload();
+        } catch(err) {
+            alert('Invalid JSON file');
+            console.error(err);
+        }
+    }
+    reader.readAsText(file);
+}
+
+document.querySelector(".import-btn").addEventListener("click", function(e) {
+    document.getElementById("importFile").click();
+})
+
+document.getElementById("importFile").addEventListener("change", importCards);

@@ -1,0 +1,15 @@
+{
+    "name": "Flashcard Study App",
+    "short_name": "Flashcard App",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "icons": [
+        {
+            "src": "./pngtree-yellow-lightning-bolt-clipart-png-image_16520276.png",
+            "sizes": "360x360",
+            "type": "image/png"
+        }
+    ]
+}

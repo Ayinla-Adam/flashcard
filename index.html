@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flash card</title>
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="manifest" href="./manifest.json" />
     <script defer src="script.js"></script>
 </head>
 
@@ -18,9 +19,16 @@
                 <h2>Flashcard</h2>
             </div>
 
+            
             <div class="btn-flex">
                 <button class="btn-section current">Study Mode</button>
                 <button class="btn-section">All Cards</button>
+            </div>
+
+            <div class="action-flex">
+                <button class="export-btn">Export cards</button>
+                <input type="file" id="importFile" accept=".json" style="display: none">
+                <button class="import-btn">Import cards</button>
             </div>
         </div>
 
@@ -222,6 +230,13 @@
     </div>
 
     <div class="overlay hidden"></div>
-</body>
 
-</html>
+    <script type="text/javascript">
+        if('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+            .then(() => console.log("Service worker registered"))
+            .catch((err) => console.err("Service worker failed", err));
+        }
+    </script>
+</body>
+</html> 
