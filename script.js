@@ -231,6 +231,7 @@ form.addEventListener("submit", function(e) {
     updateList();
     updateSelected();
     updateCategory();
+    currentCard = 0;
     checkLabel();
     checkTitle();
     renderKnown();
@@ -1560,7 +1561,7 @@ function updateContent() {
 
 function renderColors() {
     allCards.map((card) => {if (!card.color) card.color = colors[Math.floor(Math.random() * colors.length)]});
-    localStorage.setItem("storedCard", JSON.stringify(allCards));
+    localStorage.setItem("storedCards", JSON.stringify(allCards));
     if(document.querySelector(".current").textContent === "Study Mode") {
         if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
             if(hideBtn.checked) {
@@ -1738,6 +1739,12 @@ renderView();
 
 function exportCards() {
     const cardsToExport = JSON.parse(localStorage.getItem("storedCards"));
+
+    if(!cardsToExport || cardsToExport.length === 0) {
+        alert("No cards to export");
+        return;
+    }
+
     const dataStr = JSON.stringify(cardsToExport, null, 2);
 
     // Create file
@@ -1763,7 +1770,7 @@ function importCards(event) {
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
-            const importedCards = JSON.parse(e.target.result);
+            const importedCards = JSON.parse(e.target.result) || [];
             console.log(importedCards);
             console.log(typeof importedCards)
             console.log(Array.isArray(importedCards));
@@ -1773,7 +1780,24 @@ function importCards(event) {
             }
 
             localStorage.setItem("storedCards", JSON.stringify(importedCards));
-            location.reload();
+            allCards.length = 0;
+            allCards.push(...importedCards);
+            if (hideBtn.checked) hideBtn.checked = false;
+            updateCategory();
+            renderGroups();
+            renderCards(allCards);
+            renderAllCards(allCards);
+            renderStats();
+            if(document.querySelector(".btn-section.current").textContent === "Study Mode") {
+                currentCard = 0;
+                updateList();
+                renderKnown();
+                checkTitle();
+                renderColors();
+                checkLabel();
+            }
+
+            event.target.value = "";
         } catch(err) {
             alert('Invalid JSON file');
             console.error(err);
