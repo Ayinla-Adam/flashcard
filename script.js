@@ -1,4 +1,5 @@
 'use strict';
+let indexToEdit;
 let previous;
 let crossDelete;
 let crossEdit;
@@ -353,7 +354,7 @@ masterBtn.addEventListener("click", function() {
 })
 
 function updateSelected() {
-    if(document.querySelector(".current").textContent === "Study Mode") {
+    if(document.querySelector(".btn-section.current").textContent === "Study Mode") {
         if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
             if(hideBtn.checked) {
                 // cards.forEach((flashcard, index) => {
@@ -389,22 +390,30 @@ function updateSelected() {
             if(hideBtn.checked) {
                 const data = document.querySelector(".content-control").textContent.slice(0, -1);
                 const category = groups[data];
-                currentCard = 0;
                 let shown = category.filter((card) => {
                     return card.Status !== "mastered";
                 });
-    
+                currentCard = 0;
                 renderCards(shown);
+                console.log("label");
+                renderColors();
+                changeSlide(currentCard);
                 renderKnown();
+                checkLabel();
             } else {
                 const data = document.querySelector(".content-control").textContent.slice(0, -1);
                 const category = groups[data];
+                currentCard = 0;
                 renderCards(category);
+                renderColors();
+                changeSlide(currentCard);
+                checkLabel();
             }
             updateList();
             checkLabel();
             checkTitle();
             renderKnown();
+            // renderColors();
         }
     } else {
         if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
@@ -710,6 +719,7 @@ function openModal() {
                             newQuestion = selected[index].Question
                             newAnswer = selected[index].Answer;
                             newCategory = selected[index].category
+                            indexToEdit = index;
                         }
                     });
                 } else {
@@ -718,6 +728,7 @@ function openModal() {
                             newQuestion = allCards[index].Question;
                             newAnswer = allCards[index].Answer;
                             newCategory = allCards[index].category;
+                            indexToEdit = index;
                         }
                     })
                 }
@@ -732,6 +743,7 @@ function openModal() {
                             newQuestion = allCards[index].Question;
                             newAnswer = allCards[index].Answer;
                             newCategory = allCards[index].category;
+                            indexToEdit = index;
                         }
                     })
                 } else {
@@ -743,6 +755,7 @@ function openModal() {
                             newQuestion = allCards[index].Question;
                             newAnswer = allCards[index].Answer;
                             newCategory = allCards[index].category;
+                            indexToEdit = index;
                         }
                     })
                 } 
@@ -758,11 +771,13 @@ function openModal() {
                 newQuestion = filtered[index].Question;
                 newAnswer = filtered[index].Answer;
                 newCategory = filtered[index].category;
+                indexToEdit = index;
             } else {
                 const index = all.indexOf(crossEdit);
                 newQuestion = allCards[index].Question;
                 newAnswer = allCards[index].Answer;
                 newCategory = allCards[index].category;
+                indexToEdit = index;
             }
         }
     }
@@ -819,16 +834,13 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
         // if(document.querySelector(".current").textContent === "Study Mode") {
             
             if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
-    
+                let index;
                 if(hideBtn.checked) {
                     const selected = allCards.filter((card) => card.Status !== "mastered");
-                    cards.forEach((card,index) => {
-                        if(card.classList.contains("active")) {
+                    index = indexToEdit;
                             selected[index].Question = newQuestion;
                             selected[index].Answer = newAnswer;
                             selected[index].category = newCategory;
-                        }
-                    });
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     renderCards(selected);
                     renderAllCards(selected);
@@ -841,36 +853,25 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                     }
                     changeSlide(currentCard);
                 } else {
-                    cards.forEach((card, index) => {
-                        if(card.classList.contains("active")) {
-                            allCards[index].Question = newQuestion;
+                    index = indexToEdit;
+                    allCards[index].Question = newQuestion;
                             allCards[index].Answer = newAnswer;
                             allCards[index].category = newCategory;
-                        }
-                    })
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     renderCards(allCards);
                     renderAllCards(allCards);
                     updateList();
                     checkLabel();
                 }
-            } else {
+            } else 
                 if(hideBtn.checked) {
-                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
-                    const category = groups[data];
-                    const filtered = category.filter((c) => c.Status !== "mastered");
-                    cards.forEach((card, i) => {
-                         const index = allCards.indexOf(filtered[i]);
-                         if(card.classList.contains("active")) {
-                            allCards[index].Question = newQuestion;
+                    let index = indexToEdit
+                    allCards[index].Question = newQuestion;
                             allCards[index].Answer = newAnswer;
                             allCards[index].category = newCategory;
                             filtered[i].Question = newQuestion;
                             filtered[i].Answer = newAnswer;
                             filtered[i].category = newCategory;
-                        }
-                    })
-
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     const selected = allCards.filter((card) => card.Status !== "mastered");
                     renderCards(selected);
@@ -880,19 +881,14 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                     updateList();
                     checkLabel();
                 } else {
-                    cards.forEach((card, i) => {
-                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
-                        const category = groups[data];
-                        if(card.classList.contains("active")) {
-                            const index = allCards.indexOf(category[i]);
-                            allCards[index].Question = newQuestion;
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                    const category = groups[data];
+                    let index = indexToEdit;
+                    allCards[index].Question = newQuestion;
                             allCards[index].Answer = newAnswer;
                             allCards[index].category = newCategory;
                             category[i].Question = newQuestion;
                             category[i].Answer = newAnswer;
-                            category[i].category = newCategory;
-                        }
-                    })
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     renderCards(allCards);
                     renderAllCards(allCards);
@@ -916,7 +912,6 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
         //     renderAllCards();
         //     renderColors(); 
         // }
-    }
     updateCategory();
     renderGroups();
     document.querySelector(".edit-form").reset();
@@ -1564,6 +1559,7 @@ function renderColors() {
     localStorage.setItem("storedCards", JSON.stringify(allCards));
     if(document.querySelector(".current").textContent === "Study Mode") {
         if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+            console.log("here");
             if(hideBtn.checked) {
                 const filtered = allCards.filter((c) => c.Status !== "mastered");
                 cards.forEach((card, index) => {
@@ -1594,6 +1590,7 @@ function renderColors() {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
                         const color = filtered[index].color;
+                        console.log(color);
                         const followUp = colors.indexOf(color);
                         document.querySelector(".flash-cards").style.color = colorCover[followUp];
                         document.querySelector(".known-label").style.color = colorCover[followUp]
