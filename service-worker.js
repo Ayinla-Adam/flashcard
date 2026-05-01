@@ -8,6 +8,8 @@ self.addEventListener("install", (event) => {
                 'flashcard/script.js',
                 'flashcard/manifest.json',
             ]);
+        }).catch((error) => {
+            console.error("Registration failed! This file is likely missing:", error);
         })
     );
     self.skipWaiting();
