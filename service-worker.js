@@ -24,7 +24,7 @@ const ASSETS = [
 
 self.addEventListener("install", (event) => {
     event.waitUntil(
-        caches.open(flashcards-cache).then((cache) => {
+        caches.open("flashcards-cache"g).then((cache) => {
             // This will log which file is failing if it crashes again
             return Promise.all(
                 ASSETS.map(link => {
