@@ -1,15 +1,37 @@
+// self.addEventListener("install", (event) => {
+//     event.waitUntil(
+//         caches.open("flashcards-cache").then((cache) => {
+//             return cache.addAll([
+//                 "flashcard/",
+//                 "flashcard/index.html",
+//                 'flashcard/styles.css',
+//                 'flashcard/script.js',
+//                 'flashcard/manifest.json',
+//             ]);
+//         }).catch((error) => {
+//             console.error("Registration failed! This file is likely missing:", error);
+//         })
+//     );
+//     self.skipWaiting();
+// });
+
+const ASSETS = [
+    "./",
+    "./index.html",
+    "./styles.css",
+    "./script.js",
+    "./manifest.json"
+];
+
 self.addEventListener("install", (event) => {
     event.waitUntil(
-        caches.open("flashcards-cache").then((cache) => {
-            return cache.addAll([
-                "flashcard/",
-                "flashcard/index.html",
-                'flashcard/styles.css',
-                'flashcard/script.js',
-                'flashcard/manifest.json',
-            ]);
-        }).catch((error) => {
-            console.error("Registration failed! This file is likely missing:", error);
+        caches.open(CACHE_NAME).then((cache) => {
+            // This will log which file is failing if it crashes again
+            return Promise.all(
+                ASSETS.map(link => {
+                    return cache.add(link).catch(err => console.error("Failed to cache:", link, err));
+                })
+            );
         })
     );
     self.skipWaiting();
