@@ -14,6 +14,7 @@
 //     );
 //     self.skipWaiting();
 // });
+const CACHE_NAME = "flashcards-cache-v1";
 const ASSETS = [
     "./",
     "./index.html",
@@ -24,7 +25,7 @@ const ASSETS = [
 
 self.addEventListener("install", (event) => {
     event.waitUntil(
-        caches.open("flashcards-cache"g).then((cache) => {
+        caches.open(CACHE_NAME).then((cache) => {
             // This will log which file is failing if it crashes again
             return Promise.all(
                 ASSETS.map(link => {
