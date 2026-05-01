@@ -38,17 +38,15 @@ self.addEventListener("install", (event) => {
     self.skipWaiting();
 });
 
-self.addEventListener("activate", (event) => {
-    self.addEventListener('activate', (e) => {
+self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) => Promise.all(
       keys.map((key) => {
-        if (key !== CACHE_NAME) return caches.delete(key);
+        if (key !== 'current-cache-name') return caches.delete(key);
       })
     ))
   );
 });
-})
 
 self.addEventListener("fetch", (event) => {
     // 1. Only handle GET requests
