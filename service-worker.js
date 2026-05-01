@@ -42,18 +42,24 @@ self.addEventListener("activate", (event) => {
 })
 
 self.addEventListener("fetch", (event) => {
-    if (event.request !== "GET") return;
-    if(event.request.mode === "navigate") {
-        event.respondWith(
-            caches.match("flashcard/index.html").then((response) => {
-                return response || fetch(event.request);
-            })
-        )
-    }
+    // 1. Only handle GET requests
+    if (event.request.method !== "GET") return;
 
     event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
+        caches.match(event.request).then((cachedResponse) => {
+            // 2. Return cached file if found
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+
+            // 3. Otherwise, try the network
+            return fetch(event.request).catch(() => {
+                // 4. OPTIONAL: If network fails and it's a page navigation, 
+                // you could return a specific offline page here
+                if (event.request.mode === 'navigate') {
+                    return caches.match("./index.html");
+                }
+            });
         })
-    )
-})
+    );
+});
