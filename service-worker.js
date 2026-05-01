@@ -42,7 +42,7 @@ self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) => Promise.all(
       keys.map((key) => {
-        if (key !== 'current-cache-name') return caches.delete(key);
+        if (key !== CACHE_NAME) return caches.delete(key);
       })
     ))
   );
