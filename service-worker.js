@@ -6,7 +6,8 @@ self.addEventListener("install", (event) => {
                 "flashcard/index.html",
                 'flashcard/styles.css',
                 'flashcard/script.js',
-            ])
+                'flashcard/manifest.json',
+            ]);
         })
     );
     self.skipWaiting();
@@ -26,9 +27,9 @@ self.addEventListener("fetch", (event) => {
         )
     }
 
-    event.respondWidth(
+    event.respondWith(
         caches.match(event.request).then((response) => {
-            return responsse || fetch(event.request);
+            return response || fetch(event.request);
         })
     )
 })
