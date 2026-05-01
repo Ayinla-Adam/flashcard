@@ -1,6 +1,6 @@
 self.addEventListener("install", (event) => {
     event.waitUntil(
-        caches.open("pwa-cache").then((cache) => {
+        caches.open("flashcard-cache").then((cache) => {
             return caches.addAll([
                 "flashcard/",
                 "flashcard/index.html",
@@ -8,13 +8,27 @@ self.addEventListener("install", (event) => {
                 'flashcard/script.js',
             ])
         })
-    )
+    );
+    self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+    event.waitUntil(clients.claim());
 })
 
 self.addEventListener("fetch", (event) => {
-    event.respondWith(
+    if (event.request !== "GET") return;
+    if(event.request.mode === "navigate") {
+        event.respondWith(
+            caches.match("flashcard/index.html").then((response) => {
+                return response || fetch(event.request);
+            })
+        )
+    }
+
+    event.respondWidth(
         caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
+            return responsse || fetch(event.request);
         })
     )
 })
