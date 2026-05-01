@@ -14,13 +14,14 @@
 //     );
 //     self.skipWaiting();
 // });
-const CACHE_NAME = "flashcards-cache-v1";
+const CACHE_NAME = "flashcards-v1"
 const ASSETS = [
     "./",
     "./index.html",
     "./styles.css",
     "./script.js",
-    "./manifest.json"
+    "./manifest.json",
+    "./pngtree-yellow-lightning-bolt-clipart-png-image_16520276.png",
 ];
 
 self.addEventListener("install", (event) => {
