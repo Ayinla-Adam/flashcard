@@ -1,7 +1,7 @@
 self.addEventListener("install", (event) => {
     event.waitUntil(
-        caches.open("flashcard-cache").then((cache) => {
-            return caches.addAll([
+        caches.open("flashcards-cache").then((cache) => {
+            return cache.addAll([
                 "flashcard/",
                 "flashcard/index.html",
                 'flashcard/styles.css',
