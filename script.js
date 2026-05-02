@@ -865,14 +865,12 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                 }
             } else 
                 if(hideBtn.checked) {
-                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
-                    const category = groups[data];
                     let index = indexToEdit
                     allCards[index].Question = newQuestion;
                     allCards[index].Answer = newAnswer;
                     allCards[index].category = newCategory;
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
-                    const selected = category.filter((card) => card.Status !== "mastered");
+                    const selected = allCards.filter((card) => card.Status !== "mastered");
                     renderCards(selected);
                     renderAllCards(selected);
                     updateCategory();
@@ -880,8 +878,6 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                     updateList();
                     checkLabel();
                 } else {
-                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
-                    const category = groups[data];
                     let index = indexToEdit;
                     allCards[index].Question = newQuestion;
                     allCards[index].Answer = newAnswer;
