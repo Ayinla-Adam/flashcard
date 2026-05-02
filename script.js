@@ -771,7 +771,7 @@ function openModal() {
                 newQuestion = filtered[index].Question;
                 newAnswer = filtered[index].Answer;
                 newCategory = filtered[index].category;
-                indexToEdit = index;
+                indexToEdit = allCards.indexOf(filtered[index]);
             } else {
                 const index = all.indexOf(crossEdit);
                 newQuestion = allCards[index].Question;
@@ -865,15 +865,14 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                 }
             } else 
                 if(hideBtn.checked) {
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                    const category = groups[data];
                     let index = indexToEdit
                     allCards[index].Question = newQuestion;
-                            allCards[index].Answer = newAnswer;
-                            allCards[index].category = newCategory;
-                            filtered[i].Question = newQuestion;
-                            filtered[i].Answer = newAnswer;
-                            filtered[i].category = newCategory;
+                    allCards[index].Answer = newAnswer;
+                    allCards[index].category = newCategory;
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
-                    const selected = allCards.filter((card) => card.Status !== "mastered");
+                    const selected = category.filter((card) => card.Status !== "mastered");
                     renderCards(selected);
                     renderAllCards(selected);
                     updateCategory();
@@ -885,10 +884,8 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                     const category = groups[data];
                     let index = indexToEdit;
                     allCards[index].Question = newQuestion;
-                            allCards[index].Answer = newAnswer;
-                            allCards[index].category = newCategory;
-                            category[i].Question = newQuestion;
-                            category[i].Answer = newAnswer;
+                    allCards[index].Answer = newAnswer;
+                    allCards[index].category = newCategory;
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     renderCards(allCards);
                     renderAllCards(allCards);
