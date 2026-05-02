@@ -865,7 +865,7 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                 }
             } else 
                 if(hideBtn.checked) {
-                    let index = indexToEdit
+                    let index = indexToEdit;
                     allCards[index].Question = newQuestion;
                     allCards[index].Answer = newAnswer;
                     allCards[index].category = newCategory;
