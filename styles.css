@@ -789,3 +789,7 @@ form {
     justify-content: center !important;
     height: 266px;
 }
+
+.flash-card-container.centered .flash-cards {
+    align-items: center;
+}
