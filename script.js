@@ -138,18 +138,38 @@ function changeSlide(index) {
     }
 };
 
+function prevCard() {
+    currentCard -= 1;
+    changeSlide(currentCard);
+}
 
-cardsContainer.addEventListener("keydown", function(e) {
-    if(e.key === "ArrowLeft") {
-        currentCard -= 1;
-        changeSlide(currentCard);
+function nextCard() {
+    currentCard += 1;
+    changeSlide(currentCard);
+}
+
+function rotate() {
+    if(cards.length > 0) {
+        cardsContent[currentCard].classList.toggle("rotate");
     }
-    
-    if(e.key === "ArrowRight") {
-        currentCard += 1;
-        changeSlide(currentCard);
+}
+
+function handleCardKeys(e) {
+    const cardHasFocus = e.currentTarget === document.activeElement;
+    if(!cardHasFocus) return;
+    console.log("hello")
+    const keys = {
+        'ArrowRight': nextCard,
+        'ArrowLeft': prevCard,
+        ' ': rotate,
     }
-})
+    console.log(e.key);
+
+    if(keys[e.key]) {
+        e.preventDefault();
+        keys[e.key]();
+    }
+}    
 
 
 document.querySelector("#question").addEventListener("focus", function() {
@@ -1784,3 +1804,61 @@ document.querySelector(".import-btn").addEventListener("click", function(e) {
 })
 
 document.getElementById("importFile").addEventListener("change", importCards);
+
+// let touchStartX = 0;
+// let touchEndX = 0;
+// const requiredSwipe = 50;
+
+// function handleTouchStart(e) {
+//     touchStartX = e.changedTouches[0].screenX;
+// }
+
+// function handleTouchEnd(e) {
+//     touchEndX - e.changedTouches[0].screenX;
+//     handleSwipe();
+// }
+
+// function handleSwipe() {
+//     const distance = touchEndX - touchStartX;
+//     if(Math.abs(distance) < requiredSwipe) return;
+
+//     if(distance < 0) {
+//         nextCard();
+//     } else {
+//         prevCard();
+//     }
+// }
+
+let startX = 0, startY = 0, isSwiping = false;
+
+cardsContainer.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    isSwiping = false;
+}, {passive: true});
+
+cardsContainer.addEventListener("touchmove", (e) => {
+    if(!startX) return;
+
+    const deltaX = e.touches[0].clientX - startX;
+    const deltaY = e.touches[0].clientY - startY;
+
+    if(Math.abs(deltaX) > Math.abs(deltaY)) {
+        isSwiping = true;
+        e.preventDefault();
+    }
+});
+
+cardsContainer.addEventListener("touchend", (e) => {
+    if(!isSwiping) return;
+
+    const endX = e.changedTouches[0].clientX;
+    const distance = endX - startX;
+
+    if(Math.abs(distance) > 50) {
+        distance < 0 ? nextCard() : prevCard();
+    }
+
+    startX = 0;
+    isSwiping = false;
+})
