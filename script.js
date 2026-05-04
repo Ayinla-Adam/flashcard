@@ -28,20 +28,19 @@ function updateList() {
         if(cards.length > 0) {
             cards[(currentCard + cards.length) % cards.length].classList.add("active");
             cardsContainer.style.border = "none";
-            cardsContainer.style.justifyContent = "flex-start";
+            cardsContainer.classList.remove("centered");
             document.querySelector(".category-title").style.display = "block";
         } else {
             cardsParent.innerHTML = `
-            <div class="message" style="line-height: 2;">
+            <div class="message" style="line-height: 2; margin: 0 auto;">
                 <h2 style="text-align: center; font-family: serif; color: black;">No cards to study</h2>
                 <h4 style="text-align: center; color: #626262; font-weight: 400; line-height: 1.5;">Adjust your filters or create a new card to get started</h4>
             </div>
             `
             cardsContainer.style.backgroundColor = "#f9e4c8";
             cardsContainer.style.border = "1.5px dashed grey";
-            cardsContainer.style.height = "266px";
             document.querySelector(".category-title").style.display = "none";
-            cardsContainer.style.justifyContent = "center";
+            cardsContainer.classList.add("centered");
         }
         setTimeout(updateContent, 10); 
 }
@@ -140,7 +139,7 @@ function changeSlide(index) {
 };
 
 
-document.addEventListener("keydown", function(e) {
+cardsContainer.addEventListener("keydown", function(e) {
     if(e.key === "ArrowLeft") {
         currentCard -= 1;
         changeSlide(currentCard);
@@ -395,7 +394,6 @@ function updateSelected() {
                 });
                 currentCard = 0;
                 renderCards(shown);
-                console.log("label");
                 renderColors();
                 changeSlide(currentCard);
                 renderKnown();
@@ -1053,7 +1051,6 @@ function triggerCategory(card, index, activeIndex) {
             }
             groups = newGroups;
             renderGroups();
-            console.log(Object.keys(groups)[0]);
             renderAllCards(groups[Object.keys(groups)[0]]);
         }
     }
@@ -1099,6 +1096,7 @@ if(document.querySelectorAll(".single-category").length  <= 1) {
 }
 
 function checkTitle() {
+    updateList();
     const title = document.querySelector(".category-title");
     if(cards.length > 0) {
         if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
@@ -1453,7 +1451,7 @@ checkInner();
 renderColors();
 if(document.querySelectorAll(".all-card").length < 1) {
         const container = document.querySelector(".all-container");
-        container.style.height = "266px";
+        container.style.height = "266px ";
         container.style.backgroundColor = "#f9e4c8";
         container.style.border = "1.5px dashed grey";
         container.innerHTML = `
@@ -1521,28 +1519,22 @@ function checkInner() {
 checkInner();
 
 function updateContent() {
-    // 1. Corrected the selector with a dot (.)
     const container = document.querySelector(".flash-card.active .flash-card-content");
     if (!container) return;
 
-    // Reset heights of all contents first
     document.querySelectorAll(".flash-card-content").forEach((c) => {
         c.style.height = "";
     });
 
     let maxHeight = 0;
 
-    // 2. Measure the children (Question and Answer divs)
     Array.from(container.children).forEach(item => {
-        // scrollHeight captures the full height of the text even if it overflows
         maxHeight = Math.max(maxHeight, item.scrollHeight);
     });
 
-    // 3. Apply the height (add a bit of padding/buffer if needed)
     const finalHeight = maxHeight + 20; 
     container.style.height = finalHeight + 'px';
     
-    // Also ensure the main wrapper expands
     const flashCardsWrapper = document.querySelector(".flash-cards");
     if(flashCardsWrapper) flashCardsWrapper.style.height = finalHeight + "px";
 }
@@ -1552,7 +1544,6 @@ function renderColors() {
     localStorage.setItem("storedCards", JSON.stringify(allCards));
     if(document.querySelector(".current").textContent === "Study Mode") {
         if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
-            console.log("here");
             if(hideBtn.checked) {
                 const filtered = allCards.filter((c) => c.Status !== "mastered");
                 cards.forEach((card, index) => {
@@ -1583,7 +1574,6 @@ function renderColors() {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
                         const color = filtered[index].color;
-                        console.log(color);
                         const followUp = colors.indexOf(color);
                         document.querySelector(".flash-cards").style.color = colorCover[followUp];
                         document.querySelector(".known-label").style.color = colorCover[followUp]
@@ -1634,8 +1624,6 @@ function renderColors() {
                     card.style.color = colorCover[followUp];
                 })
             } else {
-                const data = document.querySelector(".content-control").textContent.slice(0, -1);
-                console.log(data);
                 const category = groups[data];
                 document.querySelectorAll(".all-card").forEach((card, index) => {
                     const color = category[index].color
@@ -1737,11 +1725,9 @@ function exportCards() {
 
     const dataStr = JSON.stringify(cardsToExport, null, 2);
 
-    // Create file
     const blob = new Blob([dataStr], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
 
-    // Trigger a download
     const a = document.createElement("a");
     a.href = url;
     a.download = `flashcards-${new Date().toISOString().slice(0, 10)}.json`;
@@ -1761,9 +1747,6 @@ function importCards(event) {
     reader.onload = function(e) {
         try {
             const importedCards = JSON.parse(e.target.result) || [];
-            console.log(importedCards);
-            console.log(typeof importedCards)
-            console.log(Array.isArray(importedCards));
             if(!Array.isArray(importedCards)) {
                 alert("Invalid file: must be an array of cards");
                 return;

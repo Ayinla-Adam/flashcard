@@ -122,7 +122,6 @@ main {
 .flash-card-container {
     width: 100%;
     background-color: rgb(255, 192, 242);
-    /* height: 100%; */
     min-height: max-content;
     border-radius: 12px;
     padding: 1rem 0;
@@ -150,19 +149,16 @@ main {
 
 .flash-cards {
     width: 100%;
-    height: auto; /* Let JS handle the height */
+    height: auto;
     position: relative; 
-    /* REMOVE THIS LINE: transform: translateY(-50%); */
-    
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Aligns to top so it grows downward */
-    transition: height 0.4s ease; /* Makes the expansion smooth */
+    align-items: flex-start;
+    transition: height 0.4s ease;
 }
 
-/* Ensure the container doesn't try to center everything vertically */
 .flash-card-container {
-    justify-content: flex-start; /* Change from center to flex-start */
+    justify-content: flex-start;
     padding-top: 2rem; 
 }
 
@@ -188,7 +184,7 @@ main {
     position: absolute;
     width: 100%;
     height: 100%;
-    -webkit-backface-visibility: hidden; /* Safari */
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
 
@@ -471,12 +467,10 @@ form {
 
 .menu-content {
     position: absolute;
-    /* background-color: transparent; */
     width: 100%;
     margin-left: 2rem;
     border-radius: 6px;
     min-width: fit-content;
-    /* box-shadow: 0px 0px 20px 2px RGBa(0, 0, 0, .2); */
     z-index: 50;
 }
 
@@ -509,7 +503,6 @@ form {
     background: transparent;
     border: 1px solid black;
     border-radius: 50px;
-    /* display: block; */
     display: flex;
     align-items: center;
     align-items: center;
@@ -790,4 +783,9 @@ form {
     color: white;
     padding: 1rem 2rem;
     border-radius: 2.5rem;
+}
+
+.flash-card-container.centered {
+    justify-content: center !important;
+    height: 266px;
 }
