@@ -157,14 +157,12 @@ function rotate() {
 function handleCardKeys(e) {
     const cardHasFocus = e.currentTarget === document.activeElement;
     if(!cardHasFocus) return;
-    console.log("hello")
     const keys = {
         'ArrowRight': nextCard,
         'ArrowLeft': prevCard,
         ' ': rotate,
     }
-    console.log(e.key);
-
+    
     if(keys[e.key]) {
         e.preventDefault();
         keys[e.key]();
@@ -1842,16 +1840,27 @@ cardsContainer.addEventListener("touchmove", (e) => {
 
     const deltaX = e.touches[0].clientX - startX;
     const deltaY = e.touches[0].clientY - startY;
+    
+    if(Math.abs(deltaX) > 20 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        cardsContainer.style.transform =  `translateX(${deltaX * 0.3}px) rotate(${deltaX * 0.05}deg)`;
+        cardsContainer.style.opacity = 1 - Math.abs(deltaX) / 100;
+    }
 
     if(Math.abs(deltaX) > Math.abs(deltaY)) {
         isSwiping = true;
         e.preventDefault();
     }
-});
+}, {passive: false });
 
 cardsContainer.addEventListener("touchend", (e) => {
-    if(!isSwiping) return;
-
+    if(!isSwiping) {
+        cardsContainer.style.transform = '';
+        cardsContainer.style.opacity = '';    
+        return;
+    }
+    
+    cardsContainer.style.transform = '';
+    cardsContainer.style.opacity = '';
     const endX = e.changedTouches[0].clientX;
     const distance = endX - startX;
 

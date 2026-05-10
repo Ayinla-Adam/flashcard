@@ -794,3 +794,9 @@ form {
 .flash-card-container.centered .flash-cards {
     align-items: center;
 }
+
+.flash-card-container {
+    touch-action: pan-y;
+    user-select: none;
+    transition: 0.4s all;
+}
