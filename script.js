@@ -207,7 +207,7 @@ form.addEventListener("submit", function(e) {
         Question: question,
         Answer: answer,
         Status: "not-mastered",
-        category: category,
+        category: category.toLowerCase().trim(),
         known: 0,
         color: colors[Math.floor(Math.random() * colors.length)],
     };
@@ -278,7 +278,7 @@ const masterBtn = document.querySelector(".master");
 const hideBtn = document.querySelector("#hide-mastered");
 
 masterBtn.addEventListener("click", function() {
-    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+    if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
 
         if(hideBtn.checked) {
             cards.forEach((card, index) => {
@@ -323,7 +323,7 @@ masterBtn.addEventListener("click", function() {
         if(hideBtn.checked) {
             cards.forEach((card, i) => {
                 if(card.classList.contains("active")) {
-                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                     const category = groups[data]
                     const required = category.filter(c => c.Status !== "mastered");
                     const index = allCards.indexOf(required[i]);
@@ -344,7 +344,7 @@ masterBtn.addEventListener("click", function() {
         } else {
             cards.forEach((card, i) => {
                 if(card.classList.contains("active")) {
-                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                     const category = groups[data]
                     const index = allCards.indexOf(category[i]);
                     if(category[i].known === 5) {
@@ -372,7 +372,7 @@ masterBtn.addEventListener("click", function() {
 
 function updateSelected() {
     if(document.querySelector(".btn-section.current").textContent === "Study Mode") {
-        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
             if(hideBtn.checked) {
                 // cards.forEach((flashcard, index) => {
                     //         if(!flashcard.classList.contains("mastered")) {
@@ -405,7 +405,7 @@ function updateSelected() {
             renderKnown();
         } else {
             if(hideBtn.checked) {
-                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                 const category = groups[data];
                 let shown = category.filter((card) => {
                     return card.Status !== "mastered";
@@ -417,7 +417,7 @@ function updateSelected() {
                 renderKnown();
                 checkLabel();
             } else {
-                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                 const category = groups[data];
                 currentCard = 0;
                 renderCards(category);
@@ -432,7 +432,7 @@ function updateSelected() {
             // renderColors();
         }
     } else {
-        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
             if(hideBtn.checked) {
                 // cards.forEach((flashcard, index) => {
                     //         if(!flashcard.classList.contains("mastered")) {
@@ -460,7 +460,7 @@ function updateSelected() {
             // renderKnown();
         } else {
             if(hideBtn.checked) {
-                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                 const category = groups[data];
                 currentCard = 0;
                 let shown = category.filter((card) => {
@@ -470,7 +470,7 @@ function updateSelected() {
                 renderAllCards(shown);
                 renderKnown();
             } else {
-                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                 const category = groups[data];
                 renderAllCards(category);
             }
@@ -502,7 +502,7 @@ function shuffleCards(array) {
 }
 
 document.querySelector(".shuffle").addEventListener("click", function() {
-    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+    if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
         if(hideBtn.checked) {
             let indexToFilter = []
             const required = allCards.filter((card, index) => {
@@ -527,7 +527,7 @@ document.querySelector(".shuffle").addEventListener("click", function() {
             renderAllCards(allCards);
         }
     } else {
-        const data = document.querySelector(".content-control").textContent.slice(0, -1);
+        const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
         let category = groups[data];
         category = shuffleCards(category);
         renderCards(category);
@@ -537,7 +537,7 @@ document.querySelector(".shuffle").addEventListener("click", function() {
 })
  
 document.querySelector(".reset").addEventListener("click", function() {
-    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+    if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
         // allCards.map((card) => {
             // card.Status = "not-mastered";
             // card.known = 0;
@@ -571,7 +571,7 @@ document.querySelector(".reset").addEventListener("click", function() {
         }
     } else {
         if(hideBtn.checked) {
-            const data = document.querySelector(".content-control").textContent.slice(0, -1);
+            const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
             const category = groups[data];
             const filtered = category.filter((card, i) => card.Status = "not-mastered");
             
@@ -587,7 +587,7 @@ document.querySelector(".reset").addEventListener("click", function() {
             renderCards(filtered);
             localStorage.setItem("storedCards", JSON.stringify(allCards));
         } else {
-            const data = document.querySelector(".content-control").textContent.slice(0, -1);
+            const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
             const category = groups[data];
             cards.forEach((card, i) => {
                 if(card.classList.contains("active")) {
@@ -624,7 +624,7 @@ document.querySelector("#noBtn").addEventListener("click", closeDeleteModal);
 document.querySelector("#yesBtn").addEventListener("click", function(e) {
     e.preventDefault();
     if(document.querySelector(".current").textContent === "Study Mode") {
-        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
     
             if(hideBtn.checked) {
                 cards.forEach((card, index) => {
@@ -674,7 +674,7 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
         } else {
             cards.forEach((card, i) => {
                 if(card.classList.contains("active")) {
-                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                     const category = groups[data];
                     const index = allCards.indexOf(category[i]);
                     allCards.splice(index, 1);
@@ -726,7 +726,7 @@ function openModal() {
     if(cards.length > 0) {
         if(document.querySelector(".current").textContent === "Study Mode") {
             
-            if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+            if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
     
                 if(hideBtn.checked) {
                     const selected = allCards.filter((card) => card.Status !== "mastered");
@@ -750,7 +750,7 @@ function openModal() {
                 }
             } else {
                 if(hideBtn.checked) {
-                    const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                     const category = groups[data];
                     const filtered = category.filter((c) => c.Status !== "mastered");
                     cards.forEach((card, i) => {
@@ -764,7 +764,7 @@ function openModal() {
                     })
                 } else {
                     cards.forEach((card, i) => {
-                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                        const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                         const category = groups[data];
                         if(card.classList.contains("active")) {
                             const index = allCards.indexOf(category[i]);
@@ -849,7 +849,7 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
     if(cards.length > 0) {
         // if(document.querySelector(".current").textContent === "Study Mode") {
             
-            if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+            if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
                 let index;
                 if(hideBtn.checked) {
                     const selected = allCards.filter((card) => card.Status !== "mastered");
@@ -930,7 +930,7 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
 let groups = {}
 
 function updateCategory() {
-    groups = {"All category": allCards};
+    groups = {"all category": allCards};
     
     for(let card of allCards) {
         let categoryName = card.category;
@@ -957,12 +957,24 @@ function updateCategory() {
 
 updateCategory();
 
+function toTitleCase(str) {
+    const words =  str.toLowerCase().split(" ");
+    
+    const capitalisedWords = words.map(word => {
+        const firstLetter = word.charAt(0).toUpperCase();
+        const otherLetters = word.slice(1);
+        return firstLetter + otherLetters;
+    })
+
+    return capitalisedWords.join(" ");
+}
+
 
 function renderGroups() {
     const menu = document.getElementById("category-menu");
     
     menu.innerHTML = Object.keys(groups).map((group) => {
-        return `<p class="single-category">${group}</p>`;
+        return `<p class="single-category">${toTitleCase(group)}</p>`;
     }).join("");
 
     // Always make the first one active after a swap
@@ -1117,7 +1129,7 @@ function checkTitle() {
     updateList();
     const title = document.querySelector(".category-title");
     if(cards.length > 0) {
-        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
             if(hideBtn.checked) {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
@@ -1137,7 +1149,7 @@ function checkTitle() {
             if(hideBtn.checked) {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
-                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                        const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                         const category = groups[data];
                         const required = category.filter((card) => card.Status !== "mastered");
                         title.textContent = required[index].category;
@@ -1146,7 +1158,7 @@ function checkTitle() {
             } else {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
-                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                        const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                         const category = groups[data];
                         title.textContent = category[index].category;
                     }
@@ -1156,6 +1168,7 @@ function checkTitle() {
     } else {
         title.textContent = "";
     }
+    title.textContent = toTitleCase(title.textContent);
 }
 
 function updateWidth() {
@@ -1179,7 +1192,7 @@ function renderKnown() {
     if(cards.length > 0) {
         const progress = document.querySelector(".progress-content");
         const progressContainer = document.querySelector(".progress-bar");
-        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
             if(hideBtn.checked) {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
@@ -1216,7 +1229,7 @@ function renderKnown() {
             if(hideBtn.checked) {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
-                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                        const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                         const category = groups[data];
                         const filtered = category.filter((c) => c.Status !== "mastered");
                         label.classList.remove("master-label");
@@ -1228,7 +1241,7 @@ function renderKnown() {
             } else {
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
-                        const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                        const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                         const category = groups[data];
                         if(category[index].known === 5) {
                             label.innerHTML = `<svg xmlns="http://w3.org" viewBox="0 0 24 24" width="20" height="20">
@@ -1278,6 +1291,7 @@ document.querySelector(".btn-flex").addEventListener("click", function(e) {
 function renderMode() {
     const study = document.querySelector(".flash-card-container");
     const container = document.querySelector(".container");
+    const subContainer = document.querySelector(".all-card-container");
     const show = document.querySelector(".all-container");
     const content = document.querySelector(".content");
     const option = document.querySelector(".flash-flex") 
@@ -1288,6 +1302,7 @@ function renderMode() {
         if(document.querySelector(".current").textContent === "All Cards") {
             study.classList.add("shown");
             container.classList.remove("shown");
+            subContainer.classList.add("shown");
             show.classList.add("shown");
             content.classList.add("shown");
             option.classList.add("shown");
@@ -1309,6 +1324,7 @@ function renderMode() {
             currentCard = 0;
             study.classList.remove("shown");
             container.classList.add("shown");
+            subContainer.classList.remove("shown");
             show.classList.remove("shown");
             content.classList.remove("shown");
             option.classList.remove("shown");
@@ -1351,7 +1367,7 @@ function renderAllCards(items) {
                         </div>
                         <div class="option-flex">
                             <div class="border-category">
-                                <p class="all-category">${card.category}</p>
+                                <p class="all-category">${toTitleCase(card.category)}</p>
                             </div>
 
                             <div class="master-label-container">
@@ -1416,7 +1432,7 @@ function renderAllCards(items) {
    
                         <div class="option-flex">
                             <div class="border-category">
-                                <p class="all-category">${card.category}</p>
+                                <p class="all-category">${toTitleCase(card.category)}</p>
                             </div>
                             <div class="inline-progress-flex">
                                 <div class="inline-progress">
@@ -1561,7 +1577,7 @@ function renderColors() {
     allCards.map((card) => {if (!card.color) card.color = colors[Math.floor(Math.random() * colors.length)]});
     localStorage.setItem("storedCards", JSON.stringify(allCards));
     if(document.querySelector(".current").textContent === "Study Mode") {
-        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
             if(hideBtn.checked) {
                 const filtered = allCards.filter((c) => c.Status !== "mastered");
                 cards.forEach((card, index) => {
@@ -1586,7 +1602,7 @@ function renderColors() {
             }
         } else {
             if(hideBtn.checked) {
-                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                 const category = groups[data];
                 const filtered = category.filter((c) => c.Status !== "mastered");
                 cards.forEach((card, index) => {
@@ -1599,7 +1615,7 @@ function renderColors() {
                     }
                 })
             } else {
-                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                 const category = groups[data];
                 cards.forEach((card, index) => {
                     if(card.classList.contains("active")) {
@@ -1613,7 +1629,7 @@ function renderColors() {
             }
         }
     } else {
-        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All category") {
+        if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
             if(hideBtn.checked) {
                 const filtered = allCards.filter((c) => c.Status !== "mastered");
                 document.querySelectorAll(".all-card").forEach((card, index) => {
@@ -1632,7 +1648,7 @@ function renderColors() {
             }
         } else {
             if(hideBtn.checked) {
-                const data = document.querySelector(".content-control").textContent.slice(0, -1);
+                const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                 const category = groups[data];
                 const filtered = category.filter((c) => c.Status !== "mastered");
                 document.querySelectorAll(".all-card").forEach((card, index) => {
@@ -1642,6 +1658,7 @@ function renderColors() {
                     card.style.color = colorCover[followUp];
                 })
             } else {
+                const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
                 const category = groups[data];
                 document.querySelectorAll(".all-card").forEach((card, index) => {
                     const color = category[index].color
@@ -1870,4 +1887,53 @@ cardsContainer.addEventListener("touchend", (e) => {
 
     startX = 0;
     isSwiping = false;
+})
+const search = document.getElementById("searchCards");
+search.addEventListener("input", function() {
+    const value = search.value.trim();
+    if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
+
+        if(hideBtn.checked) {
+            const selected = allCards.filter((cards) => cards.Status !== "mastered");
+            const match = [];
+            selected.map(card => {
+                if(card.Question.includes(value) || card.Answer.includes(value) || card.category.includes(value)) {
+                    match.push(card);
+                }
+            });
+            renderAllCards(match);
+        } else {
+            const match = [];
+            allCards.map(card => {
+                if(card.Question.includes(value) || card.Answer.includes(value) || card.category.includes(value)) {
+                    match.push(card);
+                }
+            });
+            renderAllCards(match);
+        }
+
+    } else {
+        if(hideBtn.checked) {
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
+                    const category = groups[data]
+                    const required = category.filter(c => c.Status !== "mastered");
+                    const match = [];
+                    required.map(card => {
+                        if(card.Question.includes(value) || card.Answer.includes(value) || card.category.includes(value)) {
+                            match.push(card);
+                        }
+                    });
+                    renderAllCards(match);
+        } else {
+                    const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
+                    const category = groups[data];
+                    const match = [];
+                    category.map(card => {
+                        if(card.Question.includes(value) || card.Answer.includes(value) || card.category.includes(value)) {
+                            match.push(card);
+                        }
+                    });
+                    renderAllCards(match);
+        }
+    }
 })

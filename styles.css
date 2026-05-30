@@ -545,6 +545,14 @@ form {
     display: none
 }
 
+.all-card-container {
+    display: none;
+}
+
+.all-card-container.shown {
+    display: block !important;
+}
+
 .all-container.shown {
     display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(36rem, 1fr));
@@ -799,4 +807,14 @@ form {
     touch-action: pan-y;
     user-select: none;
     transition: 0.4s all;
+}
+
+#searchCards {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #F06292;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    font-weight: 400;
+    outline: none;
 }
