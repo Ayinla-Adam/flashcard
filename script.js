@@ -21,7 +21,7 @@ const cardsParent = document.querySelector(".flash-cards");
 const allCards = JSON.parse(localStorage.getItem("storedCards")) || [];
 
 function updateList() {
-        cards = document.querySelectorAll(".flash-card");
+    cards = document.querySelectorAll(".flash-card");
         cards.forEach((card) => card.classList.remove("active"));
         cardsContent = document.querySelectorAll(".flash-card-content");
         cardsContent.forEach((content) => content.classList.remove("rotate"));
@@ -55,6 +55,8 @@ function updateList() {
 // }
 // const 
 // let isValid = true;
+allCards.map(card => card.category = card.category.toLowerCase().trim());
+updateCategory();
 
 function renderCards(items) {
 
