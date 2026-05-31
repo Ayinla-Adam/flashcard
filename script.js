@@ -19,7 +19,7 @@ const inputs = document.querySelectorAll("input");
 const cardsParent = document.querySelector(".flash-cards");
 
 const allCards = JSON.parse(localStorage.getItem("storedCards")) || [];
-
+allCards.map(card => card.category = card.category.toLowerCase().trim());
 function updateList() {
     cards = document.querySelectorAll(".flash-card");
         cards.forEach((card) => card.classList.remove("active"));
@@ -55,8 +55,6 @@ function updateList() {
 // }
 // const 
 // let isValid = true;
-allCards.map(card => card.category = card.category.toLowerCase().trim());
-updateCategory();
 
 function renderCards(items) {
 
@@ -933,7 +931,7 @@ let groups = {}
 
 function updateCategory() {
     groups = {"all category": allCards};
-    
+
     for(let card of allCards) {
         let categoryName = card.category;
     
@@ -1892,14 +1890,14 @@ cardsContainer.addEventListener("touchend", (e) => {
 })
 const search = document.getElementById("searchCards");
 search.addEventListener("input", function() {
-    const value = search.value.trim();
+    const value = search.value.toLowerCase().trim();
     if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All category") {
 
         if(hideBtn.checked) {
             const selected = allCards.filter((cards) => cards.Status !== "mastered");
             const match = [];
             selected.map(card => {
-                if(card.Question.includes(value) || card.Answer.includes(value) || card.category.includes(value)) {
+                if(card.Question.toLowerCase().includes(value) || card.Answer.toLowerCase().includes(value) || card.category.toLowerCase().includes(value)) {
                     match.push(card);
                 }
             });
@@ -1907,7 +1905,7 @@ search.addEventListener("input", function() {
         } else {
             const match = [];
             allCards.map(card => {
-                if(card.Question.includes(value) || card.Answer.includes(value) || card.category.includes(value)) {
+                if(card.Question.toLowerCase().includes(value) || card.Answer.toLowerCase().includes(value) || card.category.toLowerCase().includes(value)) {
                     match.push(card);
                 }
             });
@@ -1921,7 +1919,7 @@ search.addEventListener("input", function() {
                     const required = category.filter(c => c.Status !== "mastered");
                     const match = [];
                     required.map(card => {
-                        if(card.Question.includes(value) || card.Answer.includes(value) || card.category.includes(value)) {
+                        if(card.Question.toLowerCase().includes(value) || card.Answer.toLowerCase().includes(value) || card.category.toLowerCase().includes(value)) {
                             match.push(card);
                         }
                     });
@@ -1931,7 +1929,7 @@ search.addEventListener("input", function() {
                     const category = groups[data];
                     const match = [];
                     category.map(card => {
-                        if(card.Question.includes(value) || card.Answer.includes(value) || card.category.includes(value)) {
+                        if(card.Question.toLowerCase().includes(value) || card.Answer.toLowerCase().includes(value) || card.category.toLowerCase().includes(value)) {
                             match.push(card);
                         }
                     });
@@ -1939,3 +1937,4 @@ search.addEventListener("input", function() {
         }
     }
 })
+

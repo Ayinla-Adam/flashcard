@@ -14,7 +14,7 @@
 //     );
 //     self.skipWaiting();
 // });
-const CACHE_NAME = "flashcard-v1-study-cache"
+const CACHE_NAME = "flashcard-v1-study-project-cache"
 const ASSETS = [
     "./",
     "./index.html",
