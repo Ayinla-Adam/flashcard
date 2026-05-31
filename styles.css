@@ -608,7 +608,7 @@ form {
     word-break: keep-all;
 }
 
-.inline-inner {
+.inner {
     width: 0%;
     background-color: #F06292;
     border-radius: inherit;
