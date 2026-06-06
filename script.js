@@ -388,14 +388,14 @@ function updateSelected() {
                 })
                 // cards.forEach((card, index) => {
                     //     if(card.classList.contains("mastered")) {
-                    
+                        
                     //     }
-                
+                    
                     // })
                     
                     renderCards(shown);
                     renderColors();
-            } else {
+                } else {
                 renderCards(allCards);
                 renderColors();
             }
@@ -432,6 +432,10 @@ function updateSelected() {
             renderKnown();
             // renderColors();
         }
+        updateList();
+        checkLabel();
+        checkTitle();
+        renderKnown();
     } else {
         if(document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase() === "All Category") {
             if(hideBtn.checked) {
@@ -475,10 +479,6 @@ function updateSelected() {
                 const category = groups[data];
                 renderAllCards(checkMatch(category));
             }
-            updateList();
-            checkLabel();
-            checkTitle();
-            renderKnown();
         }
     }
 
@@ -694,32 +694,67 @@ document.querySelector("#yesBtn").addEventListener("click", function(e) {
         if (!crossDelete) {
             return
         }
+        if(document.querySelector(".content-control").textContent.slice(0, -1) === "All Category") {
 
+            if(hideBtn.checked) {
+                const array = allCards.filter((c) => c.Status !== "mastered");
+                const filtered = checkMatch(array);
+                const i = all.indexOf(crossDelete);
+                const index = allCards.indexOf(filtered[i]);
+                allCards.splice(index, 1);
+                filtered.splice(i, 1);
+                localStorage.setItem("storedCards", JSON.stringify(allCards));
+                updateCategory();
+                renderGroups();
+                renderCards(filtered);
+                renderAllCards(checkMatch(filtered));
+                renderColors();
+            } else {
+                const i = all.indexOf(crossDelete);
+                const match = checkMatch(allCards);
+                const index = allCards.findIndex(n => n === match[i]);
+                allCards.splice(index, 1);;
+                localStorage.setItem("storedCards", JSON.stringify(allCards));
+                updateCategory();
+                renderGroups();
+                renderCards(allCards);
+                renderAllCards(checkMatch(allCards));
+                renderColors();
+            }   
+    } else {
+        const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
+        const category = groups[data];
         if(hideBtn.checked) {
-            const array = allCards.filter((c) => c.Status !== "mastered");
+            const array = category.filter((c) => c.Status !== "mastered");
             const filtered = checkMatch(array);
             const i = all.indexOf(crossDelete);
             const index = allCards.indexOf(filtered[i]);
             allCards.splice(index, 1);
             filtered.splice(i, 1);
             localStorage.setItem("storedCards", JSON.stringify(allCards));
+            updateCategory();
+            renderGroups();
             renderCards(filtered);
-            renderAllCards(checkMatch(filtered));
+            renderAllCards(check(allCards.filter(c => c.Status !== "mastered")));
             renderColors();
         } else {
             const i = all.indexOf(crossDelete);
-            const match = checkMatch(allCards);
+            const match = checkMatch(category);
             const index = allCards.findIndex(n => n === match[i]);
-            allCards.splice(index, 1);;
+            allCards.splice(index, 1);
+            match.splice(i, 1);
             localStorage.setItem("storedCards", JSON.stringify(allCards));
-            renderCards(allCards);
+            updateCategory();
+            renderGroups();
+            renderCards(match);
             renderAllCards(checkMatch(allCards));
             renderColors();
-        }   
+        }
     }
         renderKnown();
         renderStats();
         closeDeleteModal();
+    }
     });
 
 function openModal() {
@@ -785,19 +820,38 @@ function openModal() {
             if(!crossEdit) {
                 return;
             };
-            if(hideBtn.checked) {
-                const index = all.indexOf(crossEdit);
-                const filtered = allCards.filter((card) => card.Status !== "mastered");
-                newQuestion = filtered[index].Question;
-                newAnswer = filtered[index].Answer;
-                newCategory = filtered[index].category;
-                indexToEdit = allCards.indexOf(filtered[index]);
+            if(document.querySelector(".content-control").textContent.slice(0, -1) === "All Category") {
+                if(hideBtn.checked) {
+                    const index = all.indexOf(crossEdit);
+                    const filtered = checkMatch(allCards.filter((card) => card.Status !== "mastered"));
+                    newQuestion = filtered[index].Question;
+                    newAnswer = filtered[index].Answer;
+                    newCategory = filtered[index].category;
+                    indexToEdit = allCards.indexOf(filtered[index]);
+                } else {
+                    const index = all.indexOf(crossEdit);
+                    newQuestion = allCards[index].Question;
+                    newAnswer = allCards[index].Answer;
+                    newCategory = allCards[index].category;
+                    indexToEdit = index;
+                }
             } else {
-                const index = all.indexOf(crossEdit);
-                newQuestion = allCards[index].Question;
-                newAnswer = allCards[index].Answer;
-                newCategory = allCards[index].category;
-                indexToEdit = index;
+                const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
+                const category = groups[data];
+                if(hideBtn.checked) {
+                    const index = all.indexOf(crossEdit);
+                    const filtered = checkMatch(category.filter((card) => card.Status !== "mastered"))
+                    newQuestion = filtered[index].Question;
+                    newAnswer = filtered[index].Answer;
+                    newCategory = filtered[index].category;
+                    indexToEdit = allCards.indexOf(filtered[index]);
+                } else {
+                    const index = all.indexOf(crossEdit);
+                    newQuestion = category[index].Question;
+                    newAnswer = category[index].Answer;
+                    newCategory = category[index].category;
+                    indexToEdit = allCards.findIndex(n => n === category[index]);
+                }
             }
         }
     }
@@ -858,9 +912,9 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                 if(hideBtn.checked) {
                     const selected = allCards.filter((card) => card.Status !== "mastered");
                     index = indexToEdit;
-                            selected[index].Question = newQuestion;
-                            selected[index].Answer = newAnswer;
-                            selected[index].category = toTitleCase(newCategory);
+                    allCards[index].Question = newQuestion;
+                    allCards[index].Answer = newAnswer;
+                    allCards[index].category = newCategory.toLowerCase();
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     renderCards(selected);
                     renderAllCards(checkMatch(selected));
@@ -875,8 +929,8 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                 } else {
                     index = indexToEdit;
                     allCards[index].Question = newQuestion;
-                            allCards[index].Answer = newAnswer;
-                            allCards[index].category = toTitleCase(newCategory);
+                    allCards[index].Answer = newAnswer;
+                    allCards[index].category = newCategory.toLowerCase();
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     renderCards(allCards);
                     renderAllCards(checkMatch(allCards));
@@ -888,25 +942,25 @@ document.querySelector(".edit-form").addEventListener("submit", function(e) {
                     let index = indexToEdit;
                     allCards[index].Question = newQuestion;
                     allCards[index].Answer = newAnswer;
-                    allCards[index].category = toTitleCase(newCategory);
+                    allCards[index].category = newCategory.toLowerCase();
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
                     const selected = allCards.filter((card) => card.Status !== "mastered");
-                    renderCards(selected);
-                    renderAllCards(checkMatch(selected));
                     updateCategory();
                     renderGroups();
+                    renderCards(selected);
+                    renderAllCards(checkMatch(allCards));
                     updateList();
                     checkLabel();
                 } else {
                     let index = indexToEdit;
                     allCards[index].Question = newQuestion;
                     allCards[index].Answer = newAnswer;
-                    allCards[index].category = toTitleCase(newCategory);
+                    allCards[index].category = newCategory.toLowerCase();
                     localStorage.setItem("storedCards", JSON.stringify(allCards));
-                    renderCards(allCards);
-                    renderAllCards(checkMatch(allCards));
                     updateCategory();
                     renderGroups();
+                    renderCards(allCards);
+                    renderAllCards(checkMatch(allCards));
                     updateList();
                     checkLabel();
                 } 
@@ -1355,7 +1409,11 @@ function renderMode() {
 renderMode();
 
 function renderAllCards(items) {
-   document.querySelector(".all-container").innerHTML =  items.map((card) => { 
+    const container = document.querySelector(".all-container");
+    container.style.height = "fit-content";
+    container.style.border = "1px solid black";
+    container.style.backgroundColor = "transparent";
+    document.querySelector(".all-container").innerHTML =  items.map((card) => { 
     if(card.known === 5 && card.Status === "mastered") {
         return `
                     <div class="all-card">
@@ -1483,6 +1541,7 @@ function renderAllCards(items) {
                     </div>
     `
     }
+    
 }).join("")
 
 checkInner();
@@ -1501,9 +1560,9 @@ if(document.querySelectorAll(".all-card").length < 1) {
         container.style.alignItems = "center";
     } else {
         const container = document.querySelector(".all-container");
-            container.style.height = "fit-content";
-            container.style.border = "1px solid black";
-            container.style.backgroundColor = "transparent";
+        container.style.height = "fit-content";
+        container.style.border = "1px solid black";
+        container.style.backgroundColor = "transparent";
     }
 }
 renderAllCards(checkMatch(allCards));
@@ -1513,29 +1572,60 @@ document.addEventListener("click", function(e) {
     if (!reset) return;
     const all = Array.from(document.querySelectorAll(".inline-reset"));
     const index = all.indexOf(reset);
-    if(hideBtn.checked) {
-        const array = allCards.filter((c) => c.Status !== "mastered");
-        const filtered = checkMatch(array);
-        filtered[index].Status = "not-mastered";
-        filtered[index].known = 0;
-        const i = allCards.findIndex(n => n === filtered[index]);
-        allCards[i].known = 0;
-        allCards[i].Status = "not-mastered"
-        localStorage.setItem("storedCards", JSON.stringify(allCards));
-        renderCards(filtered);
-        renderColors();
-        renderAllCards(checkMatch(filtered));
+    if(document.querySelector(".content-control").textContent.slice(0, -1) === "All Category") {
+        if(hideBtn.checked) {
+            const array = allCards.filter((c) => c.Status !== "mastered");
+            const filtered = checkMatch(array);
+            console.log(filtered);
+            filtered[index].Status = "not-mastered";
+            filtered[index].known = 0;
+            const i = allCards.findIndex(n => n === filtered[index]);
+            allCards[i].known = 0;
+            allCards[i].Status = "not-mastered"
+            localStorage.setItem("storedCards", JSON.stringify(allCards));
+            renderCards(filtered);
+            renderColors();
+            renderAllCards(filtered);
+        } else {
+            const match = checkMatch(allCards);
+            match[index].Status = "not-mastered";
+            match[index].known = 0;
+            const i = allCards.findIndex(n => n === match[index]);
+            allCards[i].known = 0;
+            allCards[i].Status = "not-mastered";
+            localStorage.setItem("storedCards", JSON.stringify(allCards));
+            renderCards(allCards);
+            renderColors();    
+            renderAllCards(match);
+        }
     } else {
-        const match = checkMatch(allCards);
-        match[index].Status = "not-mastered";
-        match[index].known = 0;
-        const i = allCards.findIndex(n => n === match[index]);
-        allCards[i].known = 0;
-        allCards[i].Status = "not-mastered";
-        localStorage.setItem("storedCards", JSON.stringify(allCards));
-        renderCards(allCards);
-        renderColors();    
-        renderAllCards(checkMatch(allCards));
+            const data = document.querySelector(".content-control").textContent.slice(0, -1).toLowerCase();
+            const category = groups[data];
+            if(hideBtn.checked) {
+                const array = category.filter((c) => c.Status !== "mastered");
+                const filtered = checkMatch(array);
+                console.log(filtered);
+                filtered[index].Status = "not-mastered";
+                filtered[index].known = 0;
+                const i = allCards.findIndex(n => n === filtered[index]);
+                allCards[i].known = 0;
+                allCards[i].Status = "not-mastered"
+                localStorage.setItem("storedCards", JSON.stringify(allCards));
+                renderCards(filtered);
+                renderColors();
+                renderAllCards(filtered);
+            } else {
+                const match = checkMatch(category);
+                match[index].Status = "not-mastered";
+                match[index].known = 0;
+                const i = allCards.findIndex(n => n === match[index]);
+                allCards[i].known = 0;
+                allCards[i].Status = "not-mastered";
+                localStorage.setItem("storedCards", JSON.stringify(allCards));
+                renderCards(allCards);
+                renderColors();    
+                renderAllCards(match);
+            }           
     }
     renderStats();
 });
@@ -1556,8 +1646,13 @@ document.addEventListener("click", function(e) {
 
 function checkInner() {
     if(document.querySelector(".content-control").textContent.slice(0, -1) === "All Category") {
+        let filtered = [];
         document.querySelectorAll(".inline-inner").forEach((inner, index) => {
-            const filtered = checkMatch(allCards);
+            if(hideBtn.checked) {
+                filtered = checkMatch(allCards.filtered(card.Status !== "mastered"))
+            } else {
+                filtered = checkMatch(allCards);
+            }
             if(inner.classList.contains("inner")) {
                 const width = filtered[index].known / 5 * 100;
                 inner.style.width = `${width}%`
@@ -1568,7 +1663,9 @@ function checkInner() {
         const array = groups[data];
         document.querySelectorAll(".inline-inner").forEach((inner, index) => {
         const filtered = checkMatch(array);
+        console.log(filtered);
             if(inner.classList.contains("inner")) {
+                console.log(index);
                 const width = filtered[index].known / 5 * 100;
                 inner.style.width = `${width}%`
             }
